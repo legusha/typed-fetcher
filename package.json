@@ -1,0 +1,45 @@
+{
+  "name": "typed-fetcher",
+  "version": "1.0.0",
+  "description": "Typed fetch library",
+  "main": "dist/index.cjs",
+  "type": "module",
+  "scripts": {
+    "start:dev": "webpack serve -c webpack-dev.config.js",
+    "build": "webpack -c webpack-esm.config.js && webpack -c webpack-umd.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legusha/typed-fetcher.git"
+  },
+  "keywords": [
+    "fetch",
+    "typescript",
+    "library"
+  ],
+  "author": "Vlad Legusha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/legusha/typed-fetcher/issues"
+  },
+  "homepage": "https://github.com/legusha/typed-fetcher#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.4",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  },
+  "files": [
+    "README.md",
+    "package.json",
+    "./dist/"
+  ]
+}
