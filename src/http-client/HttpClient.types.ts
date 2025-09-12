@@ -1,0 +1,95 @@
+import type { HttpError } from '../http-error/HttpErrorBase';
+
+export const RESPONSE_AS = {
+  json: 'json',
+  text: 'text',
+  arrayBuffer: 'arrayBuffer'
+} as const;
+
+export type ResponseAs = (typeof RESPONSE_AS)[keyof typeof RESPONSE_AS];
+
+export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+export interface HttpClientSettings {
+  isCatchError: boolean;
+  responseAs: ResponseAs;
+}
+
+export interface RequestParams {
+  url: string;
+  method: string;
+  options: RequestOptions;
+}
+
+interface HttpResponseError {
+  data: null;
+  error: HttpError;
+}
+
+interface HttpResponseSuccess<Data> {
+  data: Data;
+  error: null;
+}
+
+export type HttpResponse<Data> = HttpResponseSuccess<Data> | HttpResponseError;
+
+export interface HttpResponseErrorFull extends HttpResponseError {
+  original: null;
+}
+
+export interface HttpResponseSuccessFull<Data> extends HttpResponseSuccess<Data> {
+  original: Response;
+}
+
+export type HttpResponseFull<Data> = HttpResponseSuccessFull<Data> | HttpResponseErrorFull;
+
+export interface HttpClientBase {
+  get: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+
+  post: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+
+  put: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+
+  delete: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+
+  fetchGet: <Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting?: HttpClientSettings
+  ) => Promise<HttpResponseFull<Data>>;
+
+  fetchPost: <Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting?: HttpClientSettings
+  ) => Promise<HttpResponseFull<Data>>;
+
+  fetchPut: <Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting?: HttpClientSettings
+  ) => Promise<HttpResponseFull<Data>>;
+
+  fetchDelete: <Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting?: HttpClientSettings
+  ) => Promise<HttpResponseFull<Data>>;
+}
+
+export interface HttpErrorManagerBase {
+  throw: (response: Response, dataText: string) => never;
+  parse: <Data>(errorData: string | Error | HttpError, setting: HttpClientSettings) => HttpResponseFull<Data>;
+}
+
+export interface HttpFetchProvider {
+  fetch: (params: RequestParams) => Promise<Response>;
+}
+
+export interface RequestOptionsInput extends Omit<RequestInit, 'body'> {
+  body?: RequestInit['body'] | Record<string, any>;
+}
+
+export interface RequestOptions extends RequestInit {}
+
+export type Url = string;
