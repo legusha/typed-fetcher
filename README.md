@@ -1,4 +1,4 @@
-# Typed HTTP Requests
+# Typed-fetcher
 
 This npm package provides **typed HTTP requests**.
 
@@ -11,9 +11,22 @@ This is an npm package that provides typed HTTP requests. You can use any implem
 - [x] Error handling
 - [x] No need try/catch
 - [x] No dependencies
-- [x] Custom providers
+- [x] Custom fetch providers (if need)
+- [x] Custom error handling (if need)
 
 This is a basic implementation, and over time this package will be improved.
+
+## Installation
+
+#### npm
+```shell
+  npm i typed-fetcher
+```
+
+#### yarn
+```shell
+  yarn add typed-fetcher
+```
 
 ## Usage
 ```typescript
@@ -49,6 +62,7 @@ You can use any implementation to perform requests — for example:
 // interface HttpFetchProvider {
 //   fetch: (params: RequestParams) => Promise<Response>;
 // }
+
 import { HttpFetchProvider, HttpErrorManager } from 'typed-fetcher';
 
 class XmlHttpProvider implements HttpFetchProvider {

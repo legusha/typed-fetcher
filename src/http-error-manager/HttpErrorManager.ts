@@ -1,8 +1,7 @@
 import { HttpErrorJSON } from '../http-error/index';
 import { HTTP_ERROR_CODE } from '../http-error/HttpError.types';
-import type { HttpErrorManagerBase, HttpClientSettings, HttpResponseFull } from '../http-client/index';
+import type { HttpErrorManagerBase, HttpResponseFull } from '../http-client/index';
 import type { HttpErrorCode } from '../http-error/HttpError.types';
-import type { HttpError } from '../http-error/HttpErrorBase';
 
 export class HttpErrorManager implements HttpErrorManagerBase {
   private readonly codeByStatus = new Map<number, HttpErrorCode>([
@@ -54,8 +53,8 @@ export class HttpErrorManager implements HttpErrorManagerBase {
     throw new HttpErrorJSON(HTTP_ERROR_CODE.UNKNOWN, error.message, error.status, error.details);
   }
 
-  public parse<Data>(errorData: string | Error | HttpError, setting: HttpClientSettings): HttpResponseFull<Data> {
-    if (setting.isCatchError && errorData instanceof HttpErrorJSON) {
+  public parse<Data>(errorData: unknown): HttpResponseFull<Data> {
+    if (errorData instanceof HttpErrorJSON) {
       return {
         original: null,
         data: null,

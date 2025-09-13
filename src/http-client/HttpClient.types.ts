@@ -11,7 +11,6 @@ export type ResponseAs = (typeof RESPONSE_AS)[keyof typeof RESPONSE_AS];
 export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export interface HttpClientSettings {
-  isCatchError: boolean;
   responseAs: ResponseAs;
 }
 
@@ -79,7 +78,7 @@ export interface HttpClientBase {
 
 export interface HttpErrorManagerBase {
   throw: (response: Response, dataText: string) => never;
-  parse: <Data>(errorData: string | Error | HttpError, setting: HttpClientSettings) => HttpResponseFull<Data>;
+  parse: <Data>(errorData: unknown) => HttpResponseFull<Data>;
 }
 
 export interface HttpFetchProvider {
