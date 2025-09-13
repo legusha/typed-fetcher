@@ -17,7 +17,6 @@ import {FetchProvider} from "../fetchProvider/fetchProvider";
 export class HttpClient implements HttpClientBase {
   private readonly setting: HttpClientSettings = {
     responseAs: RESPONSE_AS.json,
-    isCatchError: true
   };
 
   private readonly prepare = new HttpClientPreparer();
@@ -111,7 +110,7 @@ export class HttpClient implements HttpClientBase {
 
       this.errorManager.throw(data, dataAsText);
     } catch (e) {
-      return this.errorManager.parse<Data>(e as Error, requestSetting);
+      return this.errorManager.parse<Data>(e);
     }
   }
 
