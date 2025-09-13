@@ -1,7 +1,7 @@
 {
   "name": "typed-fetcher",
-  "version": "1.0.0",
-  "description": "Typed fetch library",
+  "version": "1.0.1",
+  "description": "Typed fetch",
   "main": "dist/index.cjs",
   "type": "module",
   "scripts": {
@@ -21,7 +21,16 @@
   "keywords": [
     "fetch",
     "typescript",
-    "library"
+    "library",
+    "fetcher",
+    "typed fetch",
+    "typed-fetch",
+    "typescript",
+    "ts",
+    "library",
+    "http",
+    "request",
+    "api"
   ],
   "author": "Vlad Legusha",
   "license": "MIT",
