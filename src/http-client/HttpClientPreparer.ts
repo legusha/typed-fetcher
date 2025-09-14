@@ -5,7 +5,7 @@ export class HttpClientPreparer {
   public getRequestOptions(options: RequestOptionsInput, setting: HttpClientSettings): RequestOptions {
     const requestOptions: RequestOptions = {
       ...options,
-      body: this.getRequestBody(options.body)
+      body: this.getRequestBody(options.body),
     };
 
     if (setting.responseAs === RESPONSE_AS.json) {
@@ -14,7 +14,7 @@ export class HttpClientPreparer {
 
     return {
       ...requestOptions,
-      headers: requestOptions.headers ?? {}
+      headers: requestOptions.headers ?? {},
     };
   }
 
@@ -22,7 +22,7 @@ export class HttpClientPreparer {
     return {
       original: response,
       data: await response[setting.responseAs](),
-      error: null
+      error: null,
     };
   }
 
