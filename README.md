@@ -76,8 +76,3 @@ const httpErrorManager = new HttpErrorManager();
 const fetch = new HttpClient(httpErrorManager, xmlHttpProvider);
 ```
 
-## Installation
-
-```bash
-npm install your-package-name
-
