@@ -3,7 +3,7 @@ import type { HttpError } from '../http-error/HttpErrorBase';
 export const RESPONSE_AS = {
   json: 'json',
   text: 'text',
-  arrayBuffer: 'arrayBuffer'
+  arrayBuffer: 'arrayBuffer',
 } as const;
 
 export type ResponseAs = (typeof RESPONSE_AS)[keyof typeof RESPONSE_AS];
@@ -54,25 +54,25 @@ export interface HttpClientBase {
   fetchGet: <Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting?: HttpClientSettings
+    setting?: HttpClientSettings,
   ) => Promise<HttpResponseFull<Data>>;
 
   fetchPost: <Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting?: HttpClientSettings
+    setting?: HttpClientSettings,
   ) => Promise<HttpResponseFull<Data>>;
 
   fetchPut: <Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting?: HttpClientSettings
+    setting?: HttpClientSettings,
   ) => Promise<HttpResponseFull<Data>>;
 
   fetchDelete: <Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting?: HttpClientSettings
+    setting?: HttpClientSettings,
   ) => Promise<HttpResponseFull<Data>>;
 }
 

@@ -1,7 +1,7 @@
-import { HttpErrorJSON } from '../http-error/index';
-import { HTTP_ERROR_CODE } from '../http-error/HttpError.types';
 import type { HttpErrorManagerBase, HttpResponseFull } from '../http-client/index';
+import { HTTP_ERROR_CODE } from '../http-error/HttpError.types';
 import type { HttpErrorCode } from '../http-error/HttpError.types';
+import { HttpErrorJSON } from '../http-error/index';
 
 export class HttpErrorManager implements HttpErrorManagerBase {
   private readonly codeByStatus = new Map<number, HttpErrorCode>([
@@ -10,7 +10,7 @@ export class HttpErrorManager implements HttpErrorManagerBase {
     [404, HTTP_ERROR_CODE.NOT_FOUND],
     [408, HTTP_ERROR_CODE.REQUEST_TIMEOUT],
     [429, HTTP_ERROR_CODE.TOO_MANY_REQUEST],
-    [500, HTTP_ERROR_CODE.SERVER_ERROR]
+    [500, HTTP_ERROR_CODE.SERVER_ERROR],
   ]);
 
   public constructor() {}
@@ -43,7 +43,7 @@ export class HttpErrorManager implements HttpErrorManagerBase {
       status: data.status,
       message: data.statusText,
       details: '',
-      code: code
+      code: code,
     };
 
     if (error.code) {
@@ -58,7 +58,7 @@ export class HttpErrorManager implements HttpErrorManagerBase {
       return {
         original: null,
         data: null,
-        error: errorData
+        error: errorData,
       };
     }
 
