@@ -1,5 +1,5 @@
 export const HTTP_ERROR_TYPE = {
-  JSON: 'JSON'
+  JSON: 'JSON',
 } as const;
 
 export type HttpErrorType = (typeof HTTP_ERROR_TYPE)[keyof typeof HTTP_ERROR_TYPE];

@@ -10,7 +10,7 @@ export class HttpErrorJSON extends HttpErrorBase<typeof typeJSON> implements Htt
     public code: HttpErrorCode,
     public message: string,
     public status: number,
-    public details: null | unknown
+    public details: null | unknown,
   ) {
     super(message || 'Unknown error');
   }

@@ -17,12 +17,19 @@ export default {
         },
         globalObject: 'this',
         path: path.resolve(__dirname, 'dist'),
+        clean: true,
     },
     devServer: {
         open: true,
         host: 'localhost',
         port: 3000,
         hot: true,
+        static: {
+            directory: path.resolve(__dirname, 'dist'),
+        },
+        devMiddleware: {
+            writeToDisk: true,
+        },
     },
     plugins: [
         new HtmlWebpackPlugin({

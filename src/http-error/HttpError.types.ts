@@ -5,7 +5,7 @@ export const HTTP_ERROR_CODE = {
   TOO_MANY_REQUEST: 'TOO_MANY_REQUEST',
   NOT_FOUND: 'NOT_FOUND',
   BAD_REQUEST: 'BAD_REQUEST',
-  UNKNOWN: 'UNKNOWN'
+  UNKNOWN: 'UNKNOWN',
 } as const;
 
 export type HttpErrorCode = (typeof HTTP_ERROR_CODE)[keyof typeof HTTP_ERROR_CODE];

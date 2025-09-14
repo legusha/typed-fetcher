@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "esnext",
     "lib": ["ESNext", "dom"],
     "module": "commonjs",
     "rootDir": "./src/",
