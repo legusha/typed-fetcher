@@ -42,6 +42,14 @@ export class HttpClient implements HttpClientBase {
     return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.PUT, url, options, setting);
   }
 
+  public async patch<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting,
+  ): Promise<HttpResponse<Data>> {
+    return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.PATCH, url, options, setting);
+  }
+
   public async delete<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -84,6 +92,14 @@ export class HttpClient implements HttpClientBase {
     setting = this.setting,
   ): Promise<HttpResponseFull<Data>> {
     return await this.fetch<Data>(REQUEST_METHOD.PUT, url, options, setting);
+  }
+
+  public async fetchPatch<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting,
+  ): Promise<HttpResponseFull<Data>> {
+    return await this.fetch(REQUEST_METHOD.PATCH, url, options, setting);
   }
 
   public async fetchDelete<Data>(

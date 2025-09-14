@@ -15,6 +15,7 @@ export const REQUEST_METHOD = {
   DELETE: 'DELETE',
   HEAD: 'HEAD',
   OPTIONS: 'OPTIONS',
+  PATCH: 'PATCH',
 } as const;
 
 export type RequestMethod = (typeof REQUEST_METHOD)[keyof typeof REQUEST_METHOD];
@@ -58,6 +59,8 @@ export interface HttpClientBase {
 
   put: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
 
+  patch: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+
   delete: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
 
   head: (url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Headers>>;
@@ -77,6 +80,12 @@ export interface HttpClientBase {
   ) => Promise<HttpResponseFull<Data>>;
 
   fetchPut: <Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting?: HttpClientSettings,
+  ) => Promise<HttpResponseFull<Data>>;
+
+  fetchPatch: <Data>(
     url: Url,
     options?: RequestOptionsInput,
     setting?: HttpClientSettings,
