@@ -12,7 +12,7 @@ import type {
 } from './HttpClient.types';
 import { REQUEST_METHOD, RESPONSE_AS } from './HttpClient.types';
 import { HttpClientPreparer } from './HttpClientPreparer';
-import { FetchProvider } from '../fetchProvider/fetchProvider';
+import { FetchProvider } from '../provider';
 
 export class HttpClient implements HttpClientBase {
   private readonly setting: HttpClientSettings = {

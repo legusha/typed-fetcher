@@ -62,23 +62,6 @@ const { HttpClient, HttpErrorManager } = require('typed-fetcher')
 
 const errorManager = new HttpErrorManager();
 const httpClient = new HttpClient(errorManager);
-
-interface SomeData {
-  id: number;
-  name: string;
-}
-
-(async (): Promise<void> => {
-  const { data, error } = await httpClient.get<SomeData>('https://example.com');
-
-  if (error) {
-    console.error(error);
-    // do something with error
-    return;
-  }
-
-  console.log(data);
-})()
 ```
 
 ### HTML script
@@ -92,12 +75,23 @@ interface SomeData {
 })()
 ```
 
-### Custom fetch provider
 You can use any implementation to perform requests — for example:
 - `fetch` (default)
-- `XMLHttpRequest` (requires writing a custom provider)
+- `XMLHttpRequest`
 
-> You need to write a custom provider if you want to use `XMLHttpRequest`. 
+### XMLHttpRequest provider
+```typescript
+import { HttpClient, HttpErrorManager, XmlHttpProvider } from 'typed-fetcher'
+
+const httpErrorManager = new HttpErrorManager()
+const xmlHttpProvider = new XmlHttpProvider()
+const fetch = new HttpClient(httpErrorManager, xmlHttpProvider)
+```
+
+
+### Custom provider
+
+> You need to write a custom provider if you want to use `Custom implementation of fetch`. 
 ```typescript
 // interface HttpFetchProvider {
 //   fetch: (params: RequestParams) => Promise<Response>;
@@ -105,15 +99,16 @@ You can use any implementation to perform requests — for example:
 
 import { HttpFetchProvider, HttpErrorManager } from 'typed-fetcher';
 
-class XmlHttpProvider implements HttpFetchProvider {
+class CustomProvider implements HttpFetchProvider {
   public fetch(params: RequestParams): Promise<Response> {
     // write your own implementation
   }
 }
-const xmlHttpProvider = new XmlHttpProvider();
+
+const customProvider = new XmlHttpProvider();
 const httpErrorManager = new HttpErrorManager();
 
-const fetch = new HttpClient(httpErrorManager, xmlHttpProvider);
+const fetch = new HttpClient(httpErrorManager, customProvider);
 ```
 
 ### Custom error handling
