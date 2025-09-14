@@ -20,7 +20,6 @@ export class HttpClientPreparer {
 
   public async getResponse<Data>(response: Response, setting: HttpClientSettings): Promise<HttpResponseFull<Data>> {
     console.log(response);
-    console.log(response.headers.get('Content-Type'));
     return {
       original: response,
       data: await response[setting.responseAs](),

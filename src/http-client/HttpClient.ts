@@ -51,29 +51,15 @@ export class HttpClient implements HttpClientBase {
   }
 
   public async head(url: Url, options?: RequestOptionsInput, setting = this.setting): Promise<HttpResponse<Headers>> {
-    const optionsWithNoBody = { ...options, body: undefined };
-    const settingResponseAsText = { ...setting, responseAs: RESPONSE_AS.text };
+    return await this.fetchHeaders(REQUEST_METHOD.HEAD, url, options, setting);
+  }
 
-    const { error, original } = await this.fetch<Headers>(
-      REQUEST_METHOD.HEAD,
-      url,
-      optionsWithNoBody,
-      settingResponseAsText,
-    );
-
-    if (error) {
-      return {
-        data: null,
-        error: error,
-      };
-    }
-
-    const headers = original?.headers || null;
-
-    return {
-      data: headers,
-      error: null,
-    };
+  public async options(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting,
+  ): Promise<HttpResponse<Headers>> {
+    return await this.fetchHeaders(REQUEST_METHOD.OPTIONS, url, options, setting);
   }
 
   public async fetchGet<Data>(
@@ -110,6 +96,14 @@ export class HttpClient implements HttpClientBase {
 
   public fetchHead(url: Url, options?: RequestOptionsInput, setting = this.setting): Promise<HttpResponseFull<null>> {
     return this.fetch<null>(REQUEST_METHOD.HEAD, url, options, setting);
+  }
+
+  public fetchOptions(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting,
+  ): Promise<HttpResponseFull<null>> {
+    return this.fetch<null>(REQUEST_METHOD.OPTIONS, url, options, setting);
   }
 
   private async fetch<Data>(
@@ -161,6 +155,30 @@ export class HttpClient implements HttpClientBase {
 
     return {
       data: payload.data,
+      error: null,
+    };
+  }
+
+  private async fetchHeaders(
+    method: typeof REQUEST_METHOD.HEAD | typeof REQUEST_METHOD.OPTIONS,
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting,
+  ): Promise<HttpResponse<Headers>> {
+    const optionsWithNoBody = { ...options, body: undefined };
+    const settingResponseAsText = { ...setting, responseAs: RESPONSE_AS.text };
+    const { error, original } = await this.fetch<Headers>(method, url, optionsWithNoBody, settingResponseAsText);
+
+    if (error) {
+      return {
+        data: null,
+        error: error,
+      };
+    }
+    const headers = original?.headers || null;
+
+    return {
+      data: headers,
       error: null,
     };
   }
