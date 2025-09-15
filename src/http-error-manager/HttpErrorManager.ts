@@ -27,7 +27,7 @@ export class HttpErrorManager implements HttpErrorManagerBase {
       try {
         errorJSON = JSON.parse(dataText);
       } catch (e) {
-        console.error(e);
+        /* empty */
       }
 
       if (errorJSON) {

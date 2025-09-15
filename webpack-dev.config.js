@@ -20,7 +20,6 @@ export default {
         clean: true,
     },
     devServer: {
-        open: true,
         host: 'localhost',
         port: 3000,
         hot: true,
