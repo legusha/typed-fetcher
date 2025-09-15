@@ -31,6 +31,14 @@ export class HttpClientPreparer {
       return body;
     }
 
+    if (body && body instanceof Blob) {
+      return body;
+    }
+
+    if (body && body instanceof ReadableStream) {
+      return body;
+    }
+
     if (body && body instanceof URLSearchParams) {
       return body;
     }
