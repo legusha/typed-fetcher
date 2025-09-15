@@ -1,3 +1,3 @@
 export { HttpErrorJSON } from './HttpErrorJSON';
-export { HTTP_ERROR_CODE } from './HttpError.types';
+export { HttpErrorArrayBuffer } from './HttpErrorArrayBuffer';
 export { HttpErrorBase } from './HttpErrorBase';
