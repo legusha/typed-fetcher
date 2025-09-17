@@ -9,9 +9,10 @@ import type {
   RequestMethod,
   RequestParams,
   Url,
+  StableOptions,
 } from './HttpClient.types';
 import { REQUEST_METHOD, RESPONSE_AS } from './HttpClient.types';
-import { HttpClientPreparer } from './HttpClientPreparer';
+import { HttpClientNormalizer } from './HttpClientNormalizer';
 import { FetchProvider } from '../provider';
 
 export class HttpClient implements HttpClientBase {
@@ -19,7 +20,7 @@ export class HttpClient implements HttpClientBase {
     responseAs: RESPONSE_AS.json,
   };
 
-  private readonly prepare = new HttpClientPreparer();
+  private readonly normalizer = new HttpClientNormalizer();
 
   public constructor(
     private readonly errorManager: HttpErrorManagerBase,
@@ -122,6 +123,14 @@ export class HttpClient implements HttpClientBase {
     return this.fetch<null>(REQUEST_METHOD.OPTIONS, url, options, setting);
   }
 
+  public applyOptions(options: StableOptions): void {
+    this.normalizer.setOptions(options);
+  }
+
+  public unapplyOptions(): void {
+    this.normalizer.setOptions({});
+  }
+
   private async fetch<Data>(
     method: RequestMethod,
     url: Url,
@@ -131,7 +140,7 @@ export class HttpClient implements HttpClientBase {
     const requestSetting = { ...this.setting, ...settingInput };
     const options = optionsInput ?? {};
 
-    const requestOptions = this.prepare.getRequestOptions(options, requestSetting);
+    const requestOptions = this.normalizer.normalizeOptions(options, requestSetting);
 
     try {
       const requestParams: RequestParams = {
@@ -143,7 +152,7 @@ export class HttpClient implements HttpClientBase {
       const response = await this.fetchProvider.fetch(requestParams);
 
       if (response.ok) {
-        return await this.prepare.getResponse<Data>(response, requestSetting);
+        return await this.normalizer.normalizeResponse<Data>(response, requestSetting);
       }
 
       const dataAsText = await response.text();

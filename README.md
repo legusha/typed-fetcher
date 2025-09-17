@@ -1,27 +1,25 @@
 # Typed-fetcher
 
-This npm package provides **typed HTTP requests**.
+[//]: # (Typed-fetcher is a  **typed scalable and flexible HTTP requests**.)
+Typed-fetcher is a scalable and flexible library for **typed HTTP requests**.
 
 ### Description
-This is an npm package that provides typed HTTP requests. You can use any implementation to perform HTTP requests, for example, fetch (default) or XMLHttpRequest (but for this, you will need to write your own provider).
+Typed-fetcher is a lightweight, dependency-free TypeScript library for making fully typed HTTP requests.
+It enables you to define request and response types, ensuring type safety throughout your API calls.
+With built-in error handling that eliminates the need for try/catch, flexible support for custom HTTP providers (like fetch or XMLHttpRequest), and easy integration with both npm and yarn, Typed-fetcher streamlines HTTP communication in modern TypeScript and JavaScript projects.
+Its customizable error management and provider system make it suitable for a wide range of use cases, from simple REST APIs to complex, enterprise-grade applications.
 
 ### Features
 - [x] Typed requests
 - [x] Typed responses
 - [x] Error handling
 - [x] No need try/catch
+- [x] Not need JSON.stringify/parse for body
 - [x] No dependencies
 - [x] Custom fetch providers (if need)
 - [x] Custom error handling (if need)
 
-> HttpClient supports the following HTTP methods:
-- [x] GET
-- [x] POST
-- [x] PUT
-- [x] DELETE
-- [x] PATCH
-- [x] HEAD
-- [x] OPTIONS
+> Supports the following HTTP methods: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`, `HEAD`, `OPTIONS`
 
 ## Installation
 
@@ -54,7 +52,7 @@ const httpClient = new HttpClient(errorManager);
 
 ### HTML script
 ```html
-<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.4/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.5/dist/index.umd.js"></script>
 <script>
     const { HttpClient, HttpErrorManager } = window.typedFetcher
     const errorManager = new HttpErrorManager();
@@ -66,13 +64,14 @@ const httpClient = new HttpClient(errorManager);
 ## Usage
 
 ### Response data
+Pass the some interface to the request, and it will be returned as a response in data property
 ```typescript
 import { HttpClient, HttpErrorManager } from 'typed-fetcher';
 
 const errorManager = new HttpErrorManager();
 const httpClient = new HttpClient(errorManager);
 
-// Pass the some interface to the request and it will be returned as a response
+// For example:
 interface SomeInterface {
   id: number;
   name: string;
@@ -81,7 +80,7 @@ interface SomeInterface {
 const { data, error } = await httpClient.get<SomeInterface>('https://some-api.com/some-endpoint');
 ````
 
-**If we have success response we will get the following structure:**
+If we have **success** response we will get the following structure:
 ```typescript
 {
   data: SomeInterface;
@@ -89,7 +88,7 @@ const { data, error } = await httpClient.get<SomeInterface>('https://some-api.co
 }
 ````
 
-**If we have error response we will get the following structure:**
+If we have **error** response we will get the following structure:
 ```typescript
 {
   data: null
@@ -97,7 +96,7 @@ const { data, error } = await httpClient.get<SomeInterface>('https://some-api.co
 }
 ````
 
-**Error has the following structure:**
+Error has the following structure:
 ```typescript
 interface HttpErrorBase {
   type: 'JSON' | 'ARRAY_BUFFER';
@@ -107,12 +106,40 @@ interface HttpErrorBase {
 }
 ```
 
-**If you are need to get reference on response object you can use `fetchGet, fetchPost` and etc property whose name starts with `fetch`:**
+**Origin field** is a reference on response object, if you are need to get reference on response object you can use `fetchGet, fetchPost` and etc property whose name starts with `fetch`:
 ```typescript
 const { data, error, origin } = await httpClient.fetchGet<SomeInterface>('https://some-api.com/some-endpoint');
-
-// origin is a reference on response object
 ````
+
+Apply **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for every requests,the body and method will ignored because it is not needed.
+```typescript
+const exampleToken = ''
+const options = {
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${exampleToken}`,
+  },
+}
+
+// And then this options will be applied for every request
+httpClient.applyOptions(options)
+```
+
+Unapply **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for every requests
+```typescript
+const httpClient = new HttpClient(errorManager);
+httpClient.unapplyOptions()
+```
+
+Rewrite **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for concrete request.You can rewrite options for some request, it applies only for this request once. The body will be converted to JSON automatically if **responseAs** setting is **json** and method will be ignored because it is not needed.
+```typescript
+const optionsForConcreteRequest = {
+  credentials: 'omit',
+}
+const { data, error } = await httpClient
+  .get<SomeInterface>('https://some-api.com/some-endpoint', optionsForConcreteRequest);
+```
 
 ### Example request
 
@@ -226,7 +253,7 @@ const httpClient = new HttpClient(httpErrorManager, xmlHttpProvider)
 
 ### Custom provider
 
-**You need to write a custom provider if you want to use `custom implementation of fetch`.**
+You need to write a custom provider if you want to use `custom implementation of fetch`.
 
 ```typescript
 // interface HttpFetchProvider {
@@ -249,7 +276,7 @@ const fetch = new HttpClient(httpErrorManager, customProvider);
 
 ### Custom error handling
 
-**You need to write a custom error handler if you want to handle errors in a custom way.**
+You need to write a custom error handler if you want to handle errors in a custom way.
 ```typescript
 // interface HttpErrorManagerBase {
 //    throw: (response: Response, dataText: string) => never;

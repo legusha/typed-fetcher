@@ -1,11 +1,24 @@
-import type { RequestOptionsInput, HttpClientSettings, HttpResponseFull, RequestOptions } from './HttpClient.types';
+import type {
+  RequestOptionsInput,
+  HttpClientSettings,
+  HttpResponseFull,
+  RequestOptions,
+  StableOptions,
+} from './HttpClient.types';
 import { RESPONSE_AS } from './HttpClient.types';
 
-export class HttpClientPreparer {
-  public getRequestOptions(options: RequestOptionsInput, setting: HttpClientSettings): RequestOptions {
+export class HttpClientNormalizer {
+  private options: StableOptions = {};
+
+  public setOptions(options: StableOptions): void {
+    this.options = options;
+  }
+
+  public normalizeOptions(options: RequestOptionsInput, setting: HttpClientSettings): RequestOptions {
     const requestOptions: RequestOptions = {
+      ...this.options,
       ...options,
-      body: this.getRequestBody(options.body),
+      body: this.normalizeBody(options.body),
     };
 
     if (setting.responseAs === RESPONSE_AS.json) {
@@ -18,7 +31,10 @@ export class HttpClientPreparer {
     };
   }
 
-  public async getResponse<Data>(response: Response, setting: HttpClientSettings): Promise<HttpResponseFull<Data>> {
+  public async normalizeResponse<Data>(
+    response: Response,
+    setting: HttpClientSettings,
+  ): Promise<HttpResponseFull<Data>> {
     return {
       original: response,
       data: await response[setting.responseAs](),
@@ -26,7 +42,7 @@ export class HttpClientPreparer {
     };
   }
 
-  private getRequestBody(body: RequestOptionsInput['body']): RequestOptions['body'] {
+  private normalizeBody(body: RequestOptionsInput['body']): RequestOptions['body'] {
     if (body && body instanceof ArrayBuffer) {
       return body;
     }

@@ -19,6 +19,10 @@ export class XmlHttpProvider implements HttpFetchProvider {
         }
       }
 
+      if (params.options?.credentials === 'include') {
+        xhr.withCredentials = true;
+      }
+
       xhr.onload = () => {
         const responseInit = {
           status: xhr.status,
