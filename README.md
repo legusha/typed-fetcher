@@ -1,10 +1,9 @@
 # Typed-fetcher
 
-[//]: # (Typed-fetcher is a  **typed scalable and flexible HTTP requests**.)
-Typed-fetcher is a scalable and flexible library for **typed HTTP requests**.
+Typed-fetcher is a scalable and flexible package for **typed HTTP requests**.
 
 ### Description
-Typed-fetcher is a lightweight, dependency-free TypeScript library for making fully typed HTTP requests.
+Typed-fetcher is a lightweight, dependency-free TypeScript package for making fully typed HTTP requests.
 It enables you to define request and response types, ensuring type safety throughout your API calls.
 With built-in error handling that eliminates the need for try/catch, flexible support for custom HTTP providers (like fetch or XMLHttpRequest), and easy integration with both npm and yarn, Typed-fetcher streamlines HTTP communication in modern TypeScript and JavaScript projects.
 Its customizable error management and provider system make it suitable for a wide range of use cases, from simple REST APIs to complex, enterprise-grade applications.
