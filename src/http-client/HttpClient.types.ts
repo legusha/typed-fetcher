@@ -104,6 +104,9 @@ export interface HttpClientBase {
     options?: RequestOptionsInput,
     setting?: HttpClientSettings,
   ) => Promise<HttpResponseFull<null>>;
+
+  applyOptions: (options: StableOptions) => void;
+  unapplyOptions: () => void;
 }
 
 export interface HttpErrorManagerBase {
@@ -115,9 +118,11 @@ export interface HttpFetchProvider {
   fetch: (params: RequestParams) => Promise<Response>;
 }
 
-export interface RequestOptionsInput extends Omit<RequestInit, 'body'> {
+export interface RequestOptionsInput extends Omit<RequestInit, 'body' | 'method'> {
   body?: RequestInit['body'] | Record<string, any>;
 }
+
+export interface StableOptions extends Omit<RequestOptionsInput, 'body'> {}
 
 export interface RequestOptions extends RequestInit {}
 
