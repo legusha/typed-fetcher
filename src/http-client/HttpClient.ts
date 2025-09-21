@@ -2,7 +2,6 @@ import type {
   RequestOptionsInput,
   HttpClientBase,
   HttpErrorManagerBase,
-  HttpClientSettings,
   HttpFetchProvider,
   HttpResponse,
   HttpResponseFull,
@@ -11,14 +10,14 @@ import type {
   Url,
   StableOptions,
 } from './HttpClient.types';
-import { REQUEST_METHOD, RESPONSE_AS } from './HttpClient.types';
+import { REQUEST_METHOD } from './HttpClient.types';
 import { HttpClientNormalizer } from './HttpClientNormalizer';
+import type { Settings } from '../htttp-client-setting';
+import { HttpClientSettings, RESPONSE_AS } from '../htttp-client-setting';
 import { FetchProvider } from '../provider';
 
 export class HttpClient implements HttpClientBase {
-  private readonly setting: HttpClientSettings = {
-    responseAs: RESPONSE_AS.json,
-  };
+  private readonly setting = new HttpClientSettings();
 
   private readonly normalizer = new HttpClientNormalizer();
 
@@ -27,26 +26,34 @@ export class HttpClient implements HttpClientBase {
     private readonly fetchProvider: HttpFetchProvider = new FetchProvider(),
   ) {}
 
-  public async get<Data>(url: Url, options?: RequestOptionsInput, setting = this.setting): Promise<HttpResponse<Data>> {
+  public async get<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting.get(),
+  ): Promise<HttpResponse<Data>> {
     return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.GET, url, options, setting);
   }
 
   public async post<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
     return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.POST, url, options, setting);
   }
 
-  public async put<Data>(url: Url, options?: RequestOptionsInput, setting = this.setting): Promise<HttpResponse<Data>> {
+  public async put<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting.get(),
+  ): Promise<HttpResponse<Data>> {
     return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.PUT, url, options, setting);
   }
 
   public async patch<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
     return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.PATCH, url, options, setting);
   }
@@ -54,19 +61,23 @@ export class HttpClient implements HttpClientBase {
   public async delete<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
     return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.DELETE, url, options, setting);
   }
 
-  public async head(url: Url, options?: RequestOptionsInput, setting = this.setting): Promise<HttpResponse<Headers>> {
+  public async head(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting.get(),
+  ): Promise<HttpResponse<Headers>> {
     return await this.fetchHeaders(REQUEST_METHOD.HEAD, url, options, setting);
   }
 
   public async options(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponse<Headers>> {
     return await this.fetchHeaders(REQUEST_METHOD.OPTIONS, url, options, setting);
   }
@@ -74,7 +85,7 @@ export class HttpClient implements HttpClientBase {
   public async fetchGet<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
     return await this.fetch<Data>(REQUEST_METHOD.GET, url, options, setting);
   }
@@ -82,7 +93,7 @@ export class HttpClient implements HttpClientBase {
   public async fetchPost<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
     return await this.fetch<Data>(REQUEST_METHOD.POST, url, options, setting);
   }
@@ -90,7 +101,7 @@ export class HttpClient implements HttpClientBase {
   public async fetchPut<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
     return await this.fetch<Data>(REQUEST_METHOD.PUT, url, options, setting);
   }
@@ -98,7 +109,7 @@ export class HttpClient implements HttpClientBase {
   public async fetchPatch<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
     return await this.fetch(REQUEST_METHOD.PATCH, url, options, setting);
   }
@@ -106,19 +117,23 @@ export class HttpClient implements HttpClientBase {
   public async fetchDelete<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
     return await this.fetch<Data>(REQUEST_METHOD.DELETE, url, options, setting);
   }
 
-  public fetchHead(url: Url, options?: RequestOptionsInput, setting = this.setting): Promise<HttpResponseFull<null>> {
+  public fetchHead(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting = this.setting.get(),
+  ): Promise<HttpResponseFull<null>> {
     return this.fetch<null>(REQUEST_METHOD.HEAD, url, options, setting);
   }
 
   public fetchOptions(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponseFull<null>> {
     return this.fetch<null>(REQUEST_METHOD.OPTIONS, url, options, setting);
   }
@@ -131,20 +146,28 @@ export class HttpClient implements HttpClientBase {
     this.normalizer.setOptions({});
   }
 
+  public applySettings(settings: Settings): void {
+    this.setting.set(settings);
+  }
+
+  public unapplySettings(): void {
+    this.setting.set(HttpClientSettings.getDefault());
+  }
+
   private async fetch<Data>(
     method: RequestMethod,
     url: Url,
     optionsInput?: RequestOptionsInput,
-    settingInput = this.setting,
+    settingInput = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    const requestSetting = { ...this.setting, ...settingInput };
+    const requestSetting = this.setting.merge(settingInput);
     const options = optionsInput ?? {};
 
     const requestOptions = this.normalizer.normalizeOptions(options, requestSetting);
 
     try {
       const requestParams: RequestParams = {
-        url,
+        url: this.setting.makeUrl(url),
         method,
         options: requestOptions,
       };
@@ -167,7 +190,7 @@ export class HttpClient implements HttpClientBase {
     method: RequestMethod,
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
     const payload = await this.fetch<Data>(method, url, options, setting);
 
@@ -188,7 +211,7 @@ export class HttpClient implements HttpClientBase {
     method: typeof REQUEST_METHOD.HEAD | typeof REQUEST_METHOD.OPTIONS,
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting,
+    setting = this.setting.get(),
   ): Promise<HttpResponse<Headers>> {
     const optionsWithNoBody = { ...options, body: undefined };
     const settingResponseAsText = { ...setting, responseAs: RESPONSE_AS.text };

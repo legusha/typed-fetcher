@@ -1,11 +1,6 @@
-import type {
-  RequestOptionsInput,
-  HttpClientSettings,
-  HttpResponseFull,
-  RequestOptions,
-  StableOptions,
-} from './HttpClient.types';
-import { RESPONSE_AS } from './HttpClient.types';
+import type { RequestOptionsInput, HttpResponseFull, RequestOptions, StableOptions } from './HttpClient.types';
+import type { Settings } from '../htttp-client-setting';
+import { RESPONSE_AS } from '../htttp-client-setting';
 
 export class HttpClientNormalizer {
   private options: StableOptions = {};
@@ -14,7 +9,7 @@ export class HttpClientNormalizer {
     this.options = options;
   }
 
-  public normalizeOptions(options: RequestOptionsInput, setting: HttpClientSettings): RequestOptions {
+  public normalizeOptions(options: RequestOptionsInput, setting: Settings): RequestOptions {
     const requestOptions: RequestOptions = {
       ...this.options,
       ...options,
@@ -31,10 +26,7 @@ export class HttpClientNormalizer {
     };
   }
 
-  public async normalizeResponse<Data>(
-    response: Response,
-    setting: HttpClientSettings,
-  ): Promise<HttpResponseFull<Data>> {
+  public async normalizeResponse<Data>(response: Response, setting: Settings): Promise<HttpResponseFull<Data>> {
     return {
       original: response,
       data: await response[setting.responseAs](),
