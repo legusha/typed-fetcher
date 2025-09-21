@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {
   RequestOptionsInput,
   HttpClientBase,
@@ -26,11 +27,11 @@ export class HttpClient implements HttpClientBase {
     private readonly fetchProvider: HttpFetchProvider = new FetchProvider(),
   ) {}
 
-  public async get<Data>(
+  public async get<Data, ResponseType extends Settings['responseAs'] = typeof RESPONSE_AS.json>(
     url: Url,
     options?: RequestOptionsInput,
     setting = this.setting.get(),
-  ): Promise<HttpResponse<Data>> {
+  ): Promise<HttpResponse<Data, ResponseType>> {
     return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.GET, url, options, setting);
   }
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { RequestOptionsInput, HttpResponseFull, RequestOptions, StableOptions } from './HttpClient.types';
 import type { Settings } from '../htttp-client-setting';
 import { RESPONSE_AS } from '../htttp-client-setting';

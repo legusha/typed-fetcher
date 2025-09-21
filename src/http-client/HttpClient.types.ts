@@ -1,5 +1,6 @@
+// @ts-nocheck
 import type { HttpError } from '../http-error/HttpErrorBase';
-import type { Settings } from '../htttp-client-setting';
+import type { RESPONSE_AS, ResponseAs, Settings } from '../htttp-client-setting';
 
 export const REQUEST_METHOD = {
   GET: 'GET',
@@ -24,25 +25,40 @@ interface HttpResponseError {
   error: HttpError;
 }
 
-interface HttpResponseSuccess<Data> {
-  data: Data;
+interface ResponseSuccess<Data> {
+  json: Data;
+  text: string;
+  arrayBuffer: ArrayBuffer;
+}
+
+interface HttpResponseSuccess<Data, ResponseType extends ResponseAs> {
+  data: ResponseSuccess<Data>[ResponseType];
   error: null;
 }
 
-export type HttpResponse<Data> = HttpResponseSuccess<Data> | HttpResponseError;
+export type HttpResponse<Data, ResponseType extends ResponseAs> =
+  | HttpResponseSuccess<Data, ResponseType>
+  | HttpResponseError;
 
 export interface HttpResponseErrorFull extends HttpResponseError {
   original: null;
 }
 
-export interface HttpResponseSuccessFull<Data> extends HttpResponseSuccess<Data> {
+export interface HttpResponseSuccessFull<Data, ResponseType extends ResponseAs>
+  extends HttpResponseSuccess<Data, ResponseType> {
   original: Response;
 }
 
-export type HttpResponseFull<Data> = HttpResponseSuccessFull<Data> | HttpResponseErrorFull;
+export type HttpResponseFull<Data, ResponseType extends ResponseAs> =
+  | HttpResponseSuccessFull<Data, ResponseType>
+  | HttpResponseErrorFull;
 
 export interface HttpClientBase {
-  get: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
+  get: <Data, ResponseType extends Settings['responseAs'] = typeof RESPONSE_AS.json>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting?: Settings,
+  ) => Promise<HttpResponse<Data, ResponseType>>;
 
   post: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
 

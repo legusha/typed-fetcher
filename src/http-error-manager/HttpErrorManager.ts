@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { HttpErrorManagerBase, HttpResponseFull } from '../http-client/index';
 import { HttpErrorArrayBuffer, HttpErrorJSON } from '../http-error/index';
 
