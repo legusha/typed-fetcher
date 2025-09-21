@@ -1,12 +1,5 @@
 import type { HttpError } from '../http-error/HttpErrorBase';
-
-export const RESPONSE_AS = {
-  json: 'json',
-  text: 'text',
-  arrayBuffer: 'arrayBuffer',
-} as const;
-
-export type ResponseAs = (typeof RESPONSE_AS)[keyof typeof RESPONSE_AS];
+import type { Settings } from '../htttp-client-setting';
 
 export const REQUEST_METHOD = {
   GET: 'GET',
@@ -19,10 +12,6 @@ export const REQUEST_METHOD = {
 } as const;
 
 export type RequestMethod = (typeof REQUEST_METHOD)[keyof typeof REQUEST_METHOD];
-
-export interface HttpClientSettings {
-  responseAs: ResponseAs;
-}
 
 export interface RequestParams {
   url: string;
@@ -53,60 +42,39 @@ export interface HttpResponseSuccessFull<Data> extends HttpResponseSuccess<Data>
 export type HttpResponseFull<Data> = HttpResponseSuccessFull<Data> | HttpResponseErrorFull;
 
 export interface HttpClientBase {
-  get: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+  get: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
 
-  post: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+  post: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
 
-  put: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+  put: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
 
-  patch: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+  patch: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
 
-  delete: <Data>(url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Data>>;
+  delete: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
 
-  head: (url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Headers>>;
+  head: (url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Headers>>;
 
-  options: (url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponse<Headers>>;
+  options: (url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Headers>>;
 
-  fetchGet: <Data>(
-    url: Url,
-    options?: RequestOptionsInput,
-    setting?: HttpClientSettings,
-  ) => Promise<HttpResponseFull<Data>>;
+  fetchGet: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
 
-  fetchPost: <Data>(
-    url: Url,
-    options?: RequestOptionsInput,
-    setting?: HttpClientSettings,
-  ) => Promise<HttpResponseFull<Data>>;
+  fetchPost: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
 
-  fetchPut: <Data>(
-    url: Url,
-    options?: RequestOptionsInput,
-    setting?: HttpClientSettings,
-  ) => Promise<HttpResponseFull<Data>>;
+  fetchPut: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
 
-  fetchPatch: <Data>(
-    url: Url,
-    options?: RequestOptionsInput,
-    setting?: HttpClientSettings,
-  ) => Promise<HttpResponseFull<Data>>;
+  fetchPatch: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
 
-  fetchDelete: <Data>(
-    url: Url,
-    options?: RequestOptionsInput,
-    setting?: HttpClientSettings,
-  ) => Promise<HttpResponseFull<Data>>;
+  fetchDelete: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
 
-  fetchHead: (url: Url, options?: RequestOptionsInput, setting?: HttpClientSettings) => Promise<HttpResponseFull<null>>;
+  fetchHead: (url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<null>>;
 
-  fetchOptions: (
-    url: Url,
-    options?: RequestOptionsInput,
-    setting?: HttpClientSettings,
-  ) => Promise<HttpResponseFull<null>>;
+  fetchOptions: (url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<null>>;
 
   applyOptions: (options: StableOptions) => void;
   unapplyOptions: () => void;
+
+  applySettings: (settings: Settings) => void;
+  unapplySettings: () => void;
 }
 
 export interface HttpErrorManagerBase {
