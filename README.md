@@ -127,7 +127,6 @@ httpClient.applyOptions(options)
 
 Unapply **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for every requests
 ```typescript
-const httpClient = new HttpClient(errorManager);
 httpClient.unapplyOptions()
 ```
 
@@ -138,6 +137,32 @@ const optionsForConcreteRequest = {
 }
 const { data, error } = await httpClient
   .get<SomeInterface>('https://some-api.com/some-endpoint', optionsForConcreteRequest);
+```
+
+Apply **settings** for every requests
+```typescript
+const settings = {
+  responseAs: 'json' | 'text' | 'arrayBuffer',
+  baseUrl: 'https://example.com' // it will added to every url
+}
+
+// And then this settings will be applied for every request
+httpClient.applySettings(options)
+```
+
+Unapply **settings** for every requests
+```typescript
+httpClient.unapplySettings()
+```
+
+Rewrite **settings** for concrete request.You can rewrite **settings** for some request, it applies only for this request once.
+```typescript
+const settingsForConcreteRequest = {
+  responseAs: 'text',
+  baseUrl: 'https://some-api.com'
+}
+const { data, error } = await httpClient
+  .get<SomeInterface>('/some-endpoint', {}, settingsForConcreteRequest);
 ```
 
 ### Example request
