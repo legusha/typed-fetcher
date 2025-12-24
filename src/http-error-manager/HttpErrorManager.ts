@@ -46,7 +46,10 @@ export class HttpErrorManager implements HttpErrorManagerBase {
   }
 
   public parse<Data>(errorData: unknown): HttpResponseFull<Data> {
-    if (errorData instanceof HttpErrorJSON) {
+    const isJsonError = errorData instanceof HttpErrorJSON;
+    const isArrayBufferError = errorData instanceof HttpErrorArrayBuffer;
+
+    if (isJsonError || isArrayBufferError) {
       return {
         original: null,
         data: null,
