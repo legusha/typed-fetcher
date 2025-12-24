@@ -1,6 +1,6 @@
 {
   "name": "typed-fetcher",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Typed fetch",
   "main": "dist/index.cjs",
   "type": "module",

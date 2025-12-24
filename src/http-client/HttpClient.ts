@@ -31,7 +31,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.GET, url, options, setting);
+    return await this.fetchData<Data>(REQUEST_METHOD.GET, url, options, setting);
   }
 
   public async post<Data>(
@@ -39,7 +39,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.POST, url, options, setting);
+    return await this.fetchData<Data>(REQUEST_METHOD.POST, url, options, setting);
   }
 
   public async put<Data>(
@@ -47,7 +47,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.PUT, url, options, setting);
+    return await this.fetchData<Data>(REQUEST_METHOD.PUT, url, options, setting);
   }
 
   public async patch<Data>(
@@ -55,7 +55,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.PATCH, url, options, setting);
+    return await this.fetchData<Data>(REQUEST_METHOD.PATCH, url, options, setting);
   }
 
   public async delete<Data>(
@@ -63,7 +63,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchWithShortResponse<Data>(REQUEST_METHOD.DELETE, url, options, setting);
+    return await this.fetchData<Data>(REQUEST_METHOD.DELETE, url, options, setting);
   }
 
   public async head(
@@ -186,7 +186,7 @@ export class HttpClient implements HttpClientBase {
     }
   }
 
-  private async fetchWithShortResponse<Data>(
+  private async fetchData<Data>(
     method: RequestMethod,
     url: Url,
     options?: RequestOptionsInput,
