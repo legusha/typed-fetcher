@@ -35,27 +35,26 @@ Its customizable error management and provider system make it suitable for a wid
 ### ES Modules
 
 ```typescript
-import { HttpClient, HttpErrorManager } from 'typed-fetcher';
 
-const errorManager = new HttpErrorManager();
-const httpClient = new HttpClient(errorManager);
+import { httpClient } from 'typed-fetcher';
+
+const { data, error } = await httpClient.get<SomeInterface>('https://examplt.com');
 ```
 
 ### CommonJS
 ```typescript
-const { HttpClient, HttpErrorManager } = require('typed-fetcher')
+const { httpClient } = require('typed-fetcher')
 
-const errorManager = new HttpErrorManager();
-const httpClient = new HttpClient(errorManager);
+const { data, error } = await httpClient.get<SomeInterface>('https://examplt.com');
 ```
 
 ### HTML script
 ```html
-<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.5/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.7/dist/index.umd.js"></script>
 <script>
-    const { HttpClient, HttpErrorManager } = window.typedFetcher
-    const errorManager = new HttpErrorManager();
-    const httpClient = new HttpClient(errorManager);
+    const { httpClient } = window.typedFetcher
+    
+    const { data, error } = await httpClient.get<SomeInterface>('https://examplt.com');
 </script>
 })()
 ```
@@ -65,10 +64,7 @@ const httpClient = new HttpClient(errorManager);
 ### Response data
 Pass the some interface to the request, and it will be returned as a response in data property
 ```typescript
-import { HttpClient, HttpErrorManager } from 'typed-fetcher';
-
-const errorManager = new HttpErrorManager();
-const httpClient = new HttpClient(errorManager);
+import { httpClient } from 'typed-fetcher';
 
 // For example:
 interface SomeInterface {
@@ -164,6 +160,24 @@ const settingsForConcreteRequest = {
 const { data, error } = await httpClient
   .get<SomeInterface>('/some-endpoint', {}, settingsForConcreteRequest);
 ```
+
+### Rewrite fetch provider or error manager
+If you want to rewrite implementation with fetch provider you should pass your provider to second argument, all example you can find it below in the documentation
+```typescript
+import { HttpErrorManager } from 'typed-fetcher';
+
+const errorManager = new HttpErrorManager();
+const httpClient = new HttpClient(errorManager, /* pass your custom fetch provider*/);
+````
+
+If you want to rewrite implementation with error manager you should pass your provider to first argument, all example you can find it below in the documentation
+```typescript
+import { FetchProvider } from 'typed-fetcher';
+
+const fetchProvider = new FetchProvider()
+const yourErrorManager: HttpErrorManagerBase = {}
+const httpClient = new HttpClient(yourErrorManager, fetchProvider);
+````
 
 ### Example request
 

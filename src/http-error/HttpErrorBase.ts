@@ -12,4 +12,4 @@ export abstract class HttpErrorBase<Type extends HttpErrorType> extends Error {
   public abstract details: null | unknown;
 }
 
-export type HttpError = HttpErrorBase<typeof HTTP_ERROR_TYPE.JSON>;
+export type HttpError = HttpErrorBase<typeof HTTP_ERROR_TYPE.JSON> | HttpErrorBase<typeof HTTP_ERROR_TYPE.ARRAY_BUFFER>;
