@@ -6,11 +6,11 @@ module.exports = {
         '^.+\\.tsx?$': [
             'ts-jest',
             {
-                tsconfig: 'tsconfig.tests.json',
+                tsconfig: 'tsconfig.json',
             },
         ],
     },
-    setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
+    setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
     testMatch: ['**/tests/**/*.test.ts'],
     transformIgnorePatterns: [
         'node_modules/(?!(msw|@msw|until-async)/)',
