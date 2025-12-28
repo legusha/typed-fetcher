@@ -1,4 +1,8 @@
 import { setupServer } from 'msw/node';
-import {handlers} from './endpoints';
+import {userHandlers} from './endpoints/user';
 
-export const server = setupServer(...handlers);
+const allHandlers = [
+  ...userHandlers,
+]
+
+export const server = setupServer(...allHandlers);

@@ -8,7 +8,8 @@
     "start:dev": "webpack serve -c webpack-dev.config.js",
     "build": "webpack -c webpack-esm.config.js && webpack -c webpack-umd.config.js",
     "eslint:fix": "npx eslint . --ext .ts --fix",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "yarn test && yarn build && npm publish"
   },
   "exports": {
     "import": "./dist/index.js",
