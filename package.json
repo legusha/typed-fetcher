@@ -8,7 +8,7 @@
     "start:dev": "webpack serve -c webpack-dev.config.js",
     "build": "webpack -c webpack-esm.config.js && webpack -c webpack-umd.config.js",
     "eslint:fix": "npx eslint . --ext .ts --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "exports": {
     "import": "./dist/index.js",
@@ -48,6 +48,8 @@
   },
   "homepage": "https://github.com/legusha/typed-fetcher#readme",
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.3",
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
     "eslint": "8.57.0",
@@ -57,7 +59,10 @@
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-unused-imports": "^4.2.0",
     "html-webpack-plugin": "^5.6.4",
+    "jest": "^30.2.0",
+    "msw": "^2.12.7",
     "prettier": "^3.6.2",
+    "ts-jest": "^29.4.6",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.2",
     "webpack": "^5.101.3",
