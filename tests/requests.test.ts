@@ -1,14 +1,16 @@
 import { httpClient } from '../src'
-import { config } from "./config";
-import { data as staticData, User } from "./data";
+import {config} from "./setup/config";
+import {data as staticData, User} from "./setup/data";
+
+// httpClient.applyOptions({
+//   headers: { 'Content-Type': 'application/octet-stream' },
+// })
 
 const BASE_URL = config.BASE_URL
 
-httpClient.applySettings({baseUrl: BASE_URL, responseAs: 'json'})
-
 test('GET User', async () => {
   const { data, error } = await httpClient.get<User>(
-    `/user`,
+    `${BASE_URL}/user`,
     undefined,
     { responseAs: 'json' },
   )
@@ -19,7 +21,7 @@ test('GET User', async () => {
 test('POST User', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.post<User>(
-    `/user`,
+    `${BASE_URL}/user`,
     { body },
     { responseAs: 'json' },
   )
@@ -30,7 +32,7 @@ test('POST User', async () => {
 test('PUT User', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.put<User>(
-    `/user`,
+    `${BASE_URL}/user`,
     { body },
     { responseAs: 'json' },
   )
@@ -41,7 +43,7 @@ test('PUT User', async () => {
 test('DELETE User', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.delete<User>(
-    `/user`,
+    `${BASE_URL}/user`,
     { body },
     { responseAs: 'json' },
   )
@@ -52,7 +54,7 @@ test('DELETE User', async () => {
 test('PATCH User', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.patch<User>(
-    `/user`,
+    `${BASE_URL}/user`,
     { body },
     { responseAs: 'json' },
   )
@@ -62,7 +64,7 @@ test('PATCH User', async () => {
 
 test('HEAD User', async () => {
   const { data, error } = await httpClient.head(
-    `/user`,
+    `${BASE_URL}/user`,
     undefined,
     { responseAs: 'json' },
   )

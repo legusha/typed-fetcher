@@ -10,7 +10,7 @@ module.exports = {
             },
         ],
     },
-    setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
+    setupFilesAfterEnv: ['<rootDir>/tests/setup/setup.ts'],
     testMatch: ['**/tests/**/*.test.ts'],
     transformIgnorePatterns: [
         'node_modules/(?!(msw|@msw|until-async)/)',
