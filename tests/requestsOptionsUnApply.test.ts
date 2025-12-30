@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorManager } from '../src'
-import { config } from "./setup/config";
+import { config } from "./setup";
 import { data as staticData, User } from "./setup/data";
 
 const BASE_URL = config.BASE_URL
@@ -7,68 +7,55 @@ const BASE_URL = config.BASE_URL
 const errorManager = new HttpErrorManager()
 const httpClient = new HttpClient(errorManager)
 
-httpClient.applySettings({baseUrl: BASE_URL, responseAs: 'json'})
+httpClient.applySettings({ baseUrl: BASE_URL, responseAs: 'json' })
+httpClient.applyOptions({ headers: staticData.HEADERS })
+httpClient.unapplyOptions()
 
-test('GET User', async () => {
+test('GET User check unapply options', async () => {
   const { data, error } = await httpClient.get<User>(
     `/user`,
     undefined,
-    { responseAs: 'json' },
   )
 
   expect(data).toEqual(staticData.USER);
 });
 
-test('POST User', async () => {
+test('POST User check unapply options', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.post<User>(
     `/user`,
     { body },
-    { responseAs: 'json' },
   )
 
   expect(data).toEqual(staticData.USER);
 })
 
-test('PUT User', async () => {
+test('PUT User check unapply options', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.put<User>(
     `/user`,
     { body },
-    { responseAs: 'json' },
   )
 
   expect(data).toEqual(staticData.USER);
 })
 
-test('DELETE User', async () => {
+test('DELETE User check unapply options', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.delete<User>(
     `/user`,
     { body },
-    { responseAs: 'json' },
   )
 
   expect(data).toEqual(staticData.USER);
 })
 
-test('PATCH User', async () => {
+test('PATCH User check unapply options', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.patch<User>(
     `/user`,
     { body },
-    { responseAs: 'json' },
   )
 
   expect(data).toEqual(staticData.USER);
-})
-
-test('HEAD User', async () => {
-  const { data, error } = await httpClient.head(
-    `/user`,
-    undefined,
-    { responseAs: 'json' },
-  )
-
-  expect(data?.get('X-Custom-Header')).toEqual(staticData.HEADERS['X-Custom-Header']);
 })

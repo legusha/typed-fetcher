@@ -1,9 +1,12 @@
-import { httpClient } from '../src'
+import { HttpClient, HttpErrorManager } from '../src'
 import { config } from "./setup";
 import { data as staticData, User } from "./setup/data";
 import {arrayBufferToObject} from "./utils/arrayBuffer";
 
 const BASE_URL = config.BASE_URL
+
+const errorManager = new HttpErrorManager()
+const httpClient = new HttpClient(errorManager)
 
 httpClient.applySettings({baseUrl: BASE_URL, responseAs: 'arrayBuffer'})
 
