@@ -3,10 +3,12 @@ import type { CircuitBreakerOptions } from '../circuitBreaker/circuitBreaker.typ
 import { CircuitBreakerError } from '../circuitBreaker/circuitBreakerError';
 import { ErrorJSON } from '../error';
 import type { HttpError } from '../error/errorBase';
+import { ErrorManager } from '../errorManager';
 import type { HttpResponseFull } from '../httpClient';
+import { wait } from '../utils';
 
 export interface HttpClientRetryOptions {
-  byStatus: number[];
+  errorStatus: number[];
   delays: number[];
   totalWaitTime: number;
 }
@@ -19,7 +21,7 @@ export interface HttpClientTimeoutConfig {
 export class HttpClientRetry extends CircuitBreaker {
   public static defaultConfig: HttpClientTimeoutConfig = {
     retry: {
-      byStatus: [429, 500, 524],
+      errorStatus: [429, 500, 524],
       delays: [600, 3000, 6000, 9000],
       totalWaitTime: 60000,
     },
@@ -35,8 +37,8 @@ export class HttpClientRetry extends CircuitBreaker {
     super(config.circuitBreaker || HttpClientRetry.defaultConfig.circuitBreaker!);
   }
 
-  public async execute<Data>(action: (...args: unknown[]) => Promise<Data>, ...args: unknown[]): Promise<Data>;
-  public override async execute<Data extends HttpResponseFull<Data>>(
+  protected async execute<Data>(action: (...args: unknown[]) => Promise<Data>, ...args: unknown[]): Promise<Data>;
+  protected override async execute<Data extends HttpResponseFull<Data>>(
     action: (...args: unknown[]) => Promise<Data>,
     ...args: unknown[]
   ): Promise<Data> {
@@ -57,7 +59,7 @@ export class HttpClientRetry extends CircuitBreaker {
     }
   }
 
-  public async fetchWithRetry<Data>(
+  public async fetch<Data>(
     fn: (...args: any) => Promise<HttpResponseFull<Data>>,
     ...args: any
   ): Promise<HttpResponseFull<Data>> {
@@ -75,11 +77,13 @@ export class HttpClientRetry extends CircuitBreaker {
         const executor = (): Promise<HttpResponseFull<Data>> => fn(...args);
         let result;
 
-        if (this.config.circuitBreaker) {
-          result = await this.execute(executor);
-        } else {
-          result = await executor();
-        }
+        // @ts-ignore
+        result = await executor();
+        // if (this.config.circuitBreaker) {
+        //   result = await this.execute(executor);
+        // } else {
+        //   result = await executor();
+        // }
 
         resultData = result;
 
@@ -93,13 +97,13 @@ export class HttpClientRetry extends CircuitBreaker {
           console.error(error);
           const retryDelay = this.config.retry.delays[attempt] ?? this.config.retry.delays.at(-1) ?? this.delayDefault;
 
-          await this.wait(retryDelay);
           totalWaitTime += retryDelay;
           attempt += 1;
+          await wait(retryDelay);
           continue;
         }
 
-        if (this.isHttpError(error)) {
+        if (ErrorManager.isHttpError(error)) {
           return {
             data: null,
             error,
@@ -114,19 +118,13 @@ export class HttpClientRetry extends CircuitBreaker {
     return resultData;
   }
 
-  private isHttpError(error: unknown): error is HttpError {
-    const isObject = typeof error === 'object' && error !== null;
-
-    return isObject && 'message' in error && 'status' in error;
-  }
-
   private isErrorCircuitBreaker(error: unknown): error is CircuitBreakerError {
     return error instanceof CircuitBreakerError;
   }
 
   private isKnownRetryByError(error: unknown): error is HttpError {
-    const isHttpError = this.isHttpError(error);
-    const retryBy = this.config.retry.byStatus;
+    const isHttpError = ErrorManager.isHttpError(error);
+    const retryBy = this.config.retry.errorStatus;
 
     return isHttpError && retryBy.includes(error.status);
   }
@@ -137,6 +135,4 @@ export class HttpClientRetry extends CircuitBreaker {
 
     return isErrorCircuitBreaker && error.message === circuitBreakerMessage;
   }
-
-  private readonly wait = (delay: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, delay));
 }

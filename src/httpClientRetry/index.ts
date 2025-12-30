@@ -1,1 +1,1 @@
-export { HttpClientRetryOptions } from './httpClientRetryOptions';
+export { HttpClientRetry } from './httpClientRetry';

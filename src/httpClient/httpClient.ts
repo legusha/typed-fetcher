@@ -13,14 +13,13 @@ import type {
 import { REQUEST_METHOD } from './httpClient.types';
 import { HttpClientNormalizer } from './httpClientNormalizer';
 
-import { HttpClientRetry } from '../httpClientRetry/httpClientRetryOptions';
+import { HttpClientRetry } from '../httpClientRetry/httpClientRetry';
 import type { Settings } from '../htttpClientSetting';
 import { HttpClientSettings, RESPONSE_AS } from '../htttpClientSetting';
 import { FetchProvider } from '../provider';
 
 export class HttpClient implements HttpClientBase {
   private readonly setting = new HttpClientSettings();
-  private readonly retry = new HttpClientRetry();
   private readonly normalizer = new HttpClientNormalizer();
 
   public constructor(
@@ -168,7 +167,8 @@ export class HttpClient implements HttpClientBase {
       return this.fetch(method, url, optionsInput, settingInput);
     }
 
-    return this.retry.fetchWithRetry<Data>(this.fetch.bind(this), method, url, optionsInput, settingInput);
+    const retry = new HttpClientRetry(requestSetting.timeout);
+    return retry.fetch<Data>(this.fetch.bind(this), method, url, optionsInput, settingInput);
   }
 
   private async fetch<Data>(

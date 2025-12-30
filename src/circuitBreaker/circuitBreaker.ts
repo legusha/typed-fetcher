@@ -17,7 +17,7 @@ export class CircuitBreaker {
 
   public constructor(private readonly options: CircuitBreakerOptions) {}
 
-  public async execute<Data>(action: (...args: unknown[]) => Promise<Data>, ...args: unknown[]): Promise<Data> {
+  protected async execute<Data>(action: (...args: unknown[]) => Promise<Data>, ...args: unknown[]): Promise<Data> {
     this.checkStateOpenAndWrite();
 
     try {

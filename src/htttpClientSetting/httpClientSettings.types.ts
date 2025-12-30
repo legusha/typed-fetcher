@@ -1,4 +1,4 @@
-import type { HttpClientTimeoutConfig } from '../httpClientRetry/httpClientRetryOptions';
+import type { HttpClientTimeoutConfig } from '../httpClientRetry/httpClientRetry';
 
 export const RESPONSE_AS = {
   json: 'json',
