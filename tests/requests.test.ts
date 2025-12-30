@@ -1,10 +1,6 @@
 import { httpClient } from '../src'
-import {config} from "./config";
-import {data as staticData, User} from "./data";
-
-// httpClient.applyOptions({
-//   headers: { 'Content-Type': 'application/octet-stream' },
-// })
+import {config} from "./setup";
+import {data as staticData, User} from "./setup/data";
 
 const BASE_URL = config.BASE_URL
 

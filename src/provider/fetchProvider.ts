@@ -1,4 +1,4 @@
-import type { HttpFetchProvider, RequestParams } from '../http-client/index';
+import type { HttpFetchProvider, RequestParams } from '../httpClient/index';
 
 export class FetchProvider implements HttpFetchProvider {
   public fetch(params: RequestParams): Promise<Response> {

@@ -1,5 +1,5 @@
-import type { HttpErrorManagerBase, HttpResponseFull } from '../http-client/index';
-import { HttpErrorArrayBuffer, HttpErrorJSON } from '../http-error/index';
+import type { HttpErrorManagerBase, HttpResponseFull } from '../httpClient';
+import { HttpErrorArrayBuffer, HttpErrorJSON } from '../httpError';
 
 export class HttpErrorManager implements HttpErrorManagerBase {
   private readonly contentType = {

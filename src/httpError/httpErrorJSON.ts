@@ -1,4 +1,4 @@
-import { HTTP_ERROR_TYPE, HttpErrorBase } from './HttpErrorBase';
+import { HTTP_ERROR_TYPE, HttpErrorBase } from './httpErrorBase';
 
 const typeJSON = HTTP_ERROR_TYPE.JSON;
 

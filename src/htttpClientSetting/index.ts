@@ -1,2 +1,2 @@
 export { HttpClientSettings } from './httpClientSettings';
-export * from './HttpClientSettings.types';
+export * from './httpClientSettings.types';

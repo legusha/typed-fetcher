@@ -8,6 +8,10 @@ export const data = {
     name: 'John',
     id: 369,
   },
+  EXTERNAL_USER: {
+    name: 'John Smith',
+    id: 99,
+  },
   HEADERS: {
     'X-Custom-Header': 'test-value',
   }

@@ -5,23 +5,52 @@ import {config} from "../../config";
 const BASE_URL = config.BASE_URL;
 
 export const userHandlers = [
-  http.get(`${BASE_URL}/user`, () => {
+  http.get(`${BASE_URL}/user`, ({ request }) => {
+    const customHeaders = request.headers.get('X-Custom-Header')
+
+    if (customHeaders && customHeaders === data.HEADERS["X-Custom-Header"]) {
+      return HttpResponse.json(data.EXTERNAL_USER)
+    }
+
     return HttpResponse.json(data.USER);
   }),
 
   http.post(`${BASE_URL}/user`, async ({ request }) => {
+    const customHeaders = request.headers.get('X-Custom-Header')
+    if (customHeaders && customHeaders === data.HEADERS["X-Custom-Header"]) {
+      return HttpResponse.json(data.EXTERNAL_USER)
+    }
+
+    const body = await request.json();
+
+    return HttpResponse.json(body)
+  }),
+
+  http.patch(`${BASE_URL}/user`, async ({ request }) => {
+    const customHeaders = request.headers.get('X-Custom-Header')
+    if (customHeaders && customHeaders === data.HEADERS["X-Custom-Header"]) {
+      return HttpResponse.json(data.EXTERNAL_USER)
+    }
     const body = await request.json();
 
     return HttpResponse.json(body)
   }),
 
   http.put(`${BASE_URL}/user`, async ({ request }) => {
+    const customHeaders = request.headers.get('X-Custom-Header')
+    if (customHeaders && customHeaders === data.HEADERS["X-Custom-Header"]) {
+      return HttpResponse.json(data.EXTERNAL_USER)
+    }
     const body = await request.json();
 
     return HttpResponse.json(body)
   }),
 
   http.delete(`${BASE_URL}/user`, async ({ request }) => {
+    const customHeaders = request.headers.get('X-Custom-Header')
+    if (customHeaders && customHeaders === data.HEADERS["X-Custom-Header"]) {
+      return HttpResponse.json(data.EXTERNAL_USER)
+    }
     const body = await request.json();
 
     return HttpResponse.json(body)
@@ -38,13 +67,6 @@ export const userHandlers = [
         'Access-Control-Max-Age': '86400',
       }
     })
-  }),
-
-
-  http.patch(`${BASE_URL}/user`, async ({ request }) => {
-    const body = await request.json();
-
-    return HttpResponse.json(body)
   }),
 
   http.head(`${BASE_URL}/user`, () => {

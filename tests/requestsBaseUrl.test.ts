@@ -1,8 +1,11 @@
-import { httpClient } from '../src'
-import { config } from "./config";
-import { data as staticData, User } from "./data";
+import { HttpClient, HttpErrorManager } from '../src'
+import { config } from "./setup/config";
+import { data as staticData, User } from "./setup/data";
 
 const BASE_URL = config.BASE_URL
+
+const errorManager = new HttpErrorManager()
+const httpClient = new HttpClient(errorManager)
 
 httpClient.applySettings({baseUrl: BASE_URL, responseAs: 'json'})
 
