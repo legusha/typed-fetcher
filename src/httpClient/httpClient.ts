@@ -12,13 +12,15 @@ import type {
 } from './httpClient.types';
 import { REQUEST_METHOD } from './httpClient.types';
 import { HttpClientNormalizer } from './httpClientNormalizer';
+
+import { HttpClientRetry } from '../httpClientRetry/httpClientRetryOptions';
 import type { Settings } from '../htttpClientSetting';
 import { HttpClientSettings, RESPONSE_AS } from '../htttpClientSetting';
 import { FetchProvider } from '../provider';
 
 export class HttpClient implements HttpClientBase {
   private readonly setting = new HttpClientSettings();
-
+  private readonly retry = new HttpClientRetry();
   private readonly normalizer = new HttpClientNormalizer();
 
   public constructor(
@@ -87,7 +89,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.fetch<Data>(REQUEST_METHOD.GET, url, options, setting);
+    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.GET, url, options, setting);
   }
 
   public async fetchPost<Data>(
@@ -95,7 +97,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.fetch<Data>(REQUEST_METHOD.POST, url, options, setting);
+    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.POST, url, options, setting);
   }
 
   public async fetchPut<Data>(
@@ -103,7 +105,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.fetch<Data>(REQUEST_METHOD.PUT, url, options, setting);
+    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.PUT, url, options, setting);
   }
 
   public async fetchPatch<Data>(
@@ -111,7 +113,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.fetch(REQUEST_METHOD.PATCH, url, options, setting);
+    return await this.maybeFetchWithRetry(REQUEST_METHOD.PATCH, url, options, setting);
   }
 
   public async fetchDelete<Data>(
@@ -119,7 +121,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.fetch<Data>(REQUEST_METHOD.DELETE, url, options, setting);
+    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.DELETE, url, options, setting);
   }
 
   public fetchHead(
@@ -127,7 +129,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponseFull<null>> {
-    return this.fetch<null>(REQUEST_METHOD.HEAD, url, options, setting);
+    return this.maybeFetchWithRetry<null>(REQUEST_METHOD.HEAD, url, options, setting);
   }
 
   public fetchOptions(
@@ -135,7 +137,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponseFull<null>> {
-    return this.fetch<null>(REQUEST_METHOD.OPTIONS, url, options, setting);
+    return this.maybeFetchWithRetry<null>(REQUEST_METHOD.OPTIONS, url, options, setting);
   }
 
   public applyOptions(options: StableOptions): void {
@@ -152,6 +154,21 @@ export class HttpClient implements HttpClientBase {
 
   public unapplySettings(): void {
     this.setting.set(HttpClientSettings.getDefault());
+  }
+
+  private maybeFetchWithRetry<Data>(
+    method: RequestMethod,
+    url: Url,
+    optionsInput?: RequestOptionsInput,
+    settingInput = this.setting.get(),
+  ): Promise<HttpResponseFull<Data>> {
+    const requestSetting = this.setting.merge(settingInput);
+
+    if (!requestSetting.timeout) {
+      return this.fetch(method, url, optionsInput, settingInput);
+    }
+
+    return this.retry.fetchWithRetry<Data>(this.fetch.bind(this), method, url, optionsInput, settingInput);
   }
 
   private async fetch<Data>(
@@ -192,7 +209,7 @@ export class HttpClient implements HttpClientBase {
     options?: RequestOptionsInput,
     setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    const payload = await this.fetch<Data>(method, url, options, setting);
+    const payload = await this.maybeFetchWithRetry<Data>(method, url, options, setting);
 
     if (payload.error) {
       return {
@@ -215,7 +232,12 @@ export class HttpClient implements HttpClientBase {
   ): Promise<HttpResponse<Headers>> {
     const optionsWithNoBody = { ...options, body: undefined };
     const settingResponseAsText = { ...setting, responseAs: RESPONSE_AS.text };
-    const { error, original } = await this.fetch<Headers>(method, url, optionsWithNoBody, settingResponseAsText);
+    const { error, original } = await this.maybeFetchWithRetry<Headers>(
+      method,
+      url,
+      optionsWithNoBody,
+      settingResponseAsText,
+    );
 
     if (error) {
       return {

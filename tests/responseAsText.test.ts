@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorManager} from '../src'
+import { HttpClient, HttpErrorManager } from '../src'
 import { config } from "./setup";
 import { data as staticData, User } from "./setup/data";
 

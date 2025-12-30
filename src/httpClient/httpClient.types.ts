@@ -1,4 +1,4 @@
-import type { HttpError } from '../httpError/httpErrorBase';
+import type { HttpError } from '../error/errorBase';
 import type { Settings } from '../htttpClientSetting';
 
 export const REQUEST_METHOD = {

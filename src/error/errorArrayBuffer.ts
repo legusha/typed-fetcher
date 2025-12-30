@@ -1,11 +1,8 @@
-import { HTTP_ERROR_TYPE, HttpErrorBase } from './httpErrorBase';
+import { HTTP_ERROR_TYPE, ErrorBase } from './errorBase';
 
 const typeArrayBuffer = HTTP_ERROR_TYPE.ARRAY_BUFFER;
 
-export class HttpErrorArrayBuffer
-  extends HttpErrorBase<typeof typeArrayBuffer>
-  implements HttpErrorBase<typeof typeArrayBuffer>
-{
+export class ErrorArrayBuffer extends ErrorBase<typeof typeArrayBuffer> implements ErrorBase<typeof typeArrayBuffer> {
   public readonly type = typeArrayBuffer;
 
   public constructor(

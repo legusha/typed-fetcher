@@ -1,3 +1,5 @@
+import type { HttpClientTimeoutConfig } from '../httpClientRetry/httpClientRetryOptions';
+
 export const RESPONSE_AS = {
   json: 'json',
   text: 'text',
@@ -6,8 +8,8 @@ export const RESPONSE_AS = {
 
 export type ResponseAs = (typeof RESPONSE_AS)[keyof typeof RESPONSE_AS];
 
-export interface Settings<CatchError extends boolean = true> {
+export interface Settings {
   responseAs: ResponseAs;
   baseUrl?: string;
-  catchError?: CatchError;
+  timeout?: HttpClientTimeoutConfig;
 }
