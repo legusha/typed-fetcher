@@ -9,7 +9,7 @@
     "build": "webpack -c webpack-esm.config.js && webpack -c webpack-umd.config.js",
     "eslint:fix": "npx eslint . --ext .ts --fix",
     "test": "jest",
-    "publish": "yarn test && yarn build && npm publish"
+    "prepublish": "yarn test && yarn build"
   },
   "exports": {
     "import": "./dist/index.js",
