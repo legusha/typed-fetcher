@@ -1,5 +1,5 @@
-import type { HttpError } from '../http-error/HttpErrorBase';
-import type { Settings } from '../htttp-client-setting';
+import type { HttpError } from '../httpError/httpErrorBase';
+import type { Settings } from '../htttpClientSetting';
 
 export const REQUEST_METHOD = {
   GET: 'GET',
