@@ -9,11 +9,11 @@ import type {
   RequestParams,
   Url,
   StableOptions,
-} from './HttpClient.types';
-import { REQUEST_METHOD } from './HttpClient.types';
-import { HttpClientNormalizer } from './HttpClientNormalizer';
-import type { Settings } from '../htttp-client-setting';
-import { HttpClientSettings, RESPONSE_AS } from '../htttp-client-setting';
+} from './httpClient.types';
+import { REQUEST_METHOD } from './httpClient.types';
+import { HttpClientNormalizer } from './httpClientNormalizer';
+import type { Settings } from '../htttpClientSetting';
+import { HttpClientSettings, RESPONSE_AS } from '../htttpClientSetting';
 import { FetchProvider } from '../provider';
 
 export class HttpClient implements HttpClientBase {

@@ -1,10 +1,10 @@
-import { HttpClient } from './http-client';
-import { HttpErrorManager } from './http-error-manager';
+import { HttpClient } from './httpClient';
+import { HttpErrorManager } from './httpErrorManager';
 
-export type { HttpClientBase, HttpFetchProvider, HttpErrorManagerBase } from './http-client/HttpClient.types';
+export type { HttpClientBase, HttpFetchProvider, HttpErrorManagerBase } from './httpClient/httpClient.types.js';
 
 export { HttpErrorManager, HttpClient };
-export { HttpErrorJSON, HttpErrorBase } from './http-error';
+export { HttpErrorJSON, HttpErrorBase } from './httpError';
 export { XmlHttpProvider, FetchProvider } from './provider';
 
 const httpErrorManager = new HttpErrorManager();

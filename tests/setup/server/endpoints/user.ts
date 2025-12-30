@@ -8,8 +8,6 @@ export const userHandlers = [
   http.get(`${BASE_URL}/user`, ({ request }) => {
     const customHeaders = request.headers.get('X-Custom-Header')
 
-    console.log('#########', customHeaders)
-    console.log('#########', request.headers)
     if (customHeaders && customHeaders === data.HEADERS["X-Custom-Header"]) {
       return HttpResponse.json(data.EXTERNAL_USER)
     }

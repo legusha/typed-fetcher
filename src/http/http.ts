@@ -1,4 +1,4 @@
-import type { HttpClientBase, Url } from '../http-client/index';
+import type { HttpClientBase, Url } from '../httpClient/index';
 
 type httpURLFn = (...args: any[]) => Url;
 

@@ -1,5 +1,5 @@
-import type { Settings } from './HttpClientSettings.types';
-import { RESPONSE_AS } from './HttpClientSettings.types';
+import type { Settings } from './httpClientSettings.types';
+import { RESPONSE_AS } from './httpClientSettings.types';
 
 export class HttpClientSettings {
   private settings = HttpClientSettings.getDefault();

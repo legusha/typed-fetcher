@@ -6,7 +6,8 @@ export const RESPONSE_AS = {
 
 export type ResponseAs = (typeof RESPONSE_AS)[keyof typeof RESPONSE_AS];
 
-export interface Settings {
+export interface Settings<CatchError extends boolean = true> {
   responseAs: ResponseAs;
   baseUrl?: string;
+  catchError?: CatchError;
 }

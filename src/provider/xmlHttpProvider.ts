@@ -1,4 +1,4 @@
-import type { HttpFetchProvider, RequestParams } from '../http-client';
+import type { HttpFetchProvider, RequestParams } from '../httpClient';
 
 export class XmlHttpProvider implements HttpFetchProvider {
   public constructor() {
