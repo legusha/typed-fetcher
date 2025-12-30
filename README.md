@@ -50,7 +50,7 @@ const { data, error } = await httpClient.get<SomeInterface>('https://examplt.com
 
 ### HTML script
 ```html
-<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.7/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.9/dist/index.umd.js"></script>
 <script>
     const { httpClient } = window.typedFetcher
     
