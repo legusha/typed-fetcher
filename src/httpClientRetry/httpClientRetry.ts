@@ -26,9 +26,9 @@ export class HttpClientRetry extends CircuitBreaker {
       totalWaitTime: 60000,
     },
     circuitBreaker: {
-      failureThreshold: 3,
+      failureThreshold: 10,
       successThreshold: 1,
-      timeout: 10000,
+      timeout: 3000,
     },
   };
   private readonly delayDefault = 9000;
@@ -77,13 +77,11 @@ export class HttpClientRetry extends CircuitBreaker {
         const executor = (): Promise<HttpResponseFull<Data>> => fn(...args);
         let result;
 
-        // @ts-ignore
-        result = await executor();
-        // if (this.config.circuitBreaker) {
-        //   result = await this.execute(executor);
-        // } else {
-        //   result = await executor();
-        // }
+        if (this.config.circuitBreaker) {
+          result = await this.execute(executor);
+        } else {
+          result = await executor();
+        }
 
         resultData = result;
 
