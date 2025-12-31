@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorManager } from '../src'
-import { config } from "./setup/config";
+import { config } from "./setup";
 import { data as staticData, User } from "./setup/data";
 
 const BASE_URL = config.BASE_URL

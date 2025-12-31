@@ -3,6 +3,8 @@ import {data} from "../../data";
 import {config} from "../../config";
 
 const BASE_URL = config.BASE_URL;
+const MAX_RETRY = 10
+let retryCounter = 0
 
 export const userHandlers = [
   http.get(`${BASE_URL}/user`, ({ request }) => {
@@ -13,6 +15,20 @@ export const userHandlers = [
     }
 
     return HttpResponse.json(data.USER);
+  }),
+
+  http.get(`${BASE_URL}/user/retry`, () => {
+    retryCounter++
+
+    if (retryCounter > MAX_RETRY) {
+      retryCounter = 0
+      return HttpResponse.json(data.USER);
+    }
+
+    return HttpResponse.json(
+      { error: 'Server error' },
+      { status: 500 }
+    );
   }),
 
   http.post(`${BASE_URL}/user`, async ({ request }) => {

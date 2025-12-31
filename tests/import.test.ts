@@ -4,15 +4,15 @@ test('HttpClient is object', () => {
   expect(typeof HttpClient).toBe('function');
 })
 
-test('HttpErrorManager is object', () => {
+test('ErrorManager is object', () => {
   expect(typeof HttpErrorManager).toBe('function');
 })
 
-test('HttpErrorJSON is object', () => {
+test('ErrorJSON is object', () => {
   expect(typeof HttpErrorJSON).toBe('function');
 })
 
-test('HttpErrorBase is object', () => {
+test('ErrorBase is object', () => {
   expect(typeof HttpErrorBase).toBe('function');
 })
 

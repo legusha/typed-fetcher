@@ -1,8 +1,8 @@
-import { HTTP_ERROR_TYPE, HttpErrorBase } from './httpErrorBase';
+import { HTTP_ERROR_TYPE, ErrorBase } from './errorBase';
 
 const typeJSON = HTTP_ERROR_TYPE.JSON;
 
-export class HttpErrorJSON extends HttpErrorBase<typeof typeJSON> implements HttpErrorBase<typeof typeJSON> {
+export class ErrorJSON extends ErrorBase<typeof typeJSON> implements ErrorBase<typeof typeJSON> {
   public type = typeJSON;
 
   public constructor(

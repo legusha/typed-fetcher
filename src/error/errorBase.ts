@@ -5,11 +5,11 @@ export const HTTP_ERROR_TYPE = {
 
 export type HttpErrorType = (typeof HTTP_ERROR_TYPE)[keyof typeof HTTP_ERROR_TYPE];
 
-export abstract class HttpErrorBase<Type extends HttpErrorType> extends Error {
+export abstract class ErrorBase<Type extends HttpErrorType> extends Error {
   public abstract type: Type;
   public abstract status: number;
   public abstract message: string;
   public abstract details: null | unknown;
 }
 
-export type HttpError = HttpErrorBase<typeof HTTP_ERROR_TYPE.JSON> | HttpErrorBase<typeof HTTP_ERROR_TYPE.ARRAY_BUFFER>;
+export type HttpError = ErrorBase<typeof HTTP_ERROR_TYPE.JSON> | ErrorBase<typeof HTTP_ERROR_TYPE.ARRAY_BUFFER>;

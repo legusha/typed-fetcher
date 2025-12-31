@@ -1,7 +1,8 @@
+import { ErrorArrayBuffer, ErrorJSON } from '../error';
+import type { HttpError } from '../error/errorBase';
 import type { HttpErrorManagerBase, HttpResponseFull } from '../httpClient';
-import { HttpErrorArrayBuffer, HttpErrorJSON } from '../httpError';
 
-export class HttpErrorManager implements HttpErrorManagerBase {
+export class ErrorManager implements HttpErrorManagerBase {
   private readonly contentType = {
     JSON: 'application/json',
     ARRAY_BUFFER: 'application/octet-stream',
@@ -16,11 +17,11 @@ export class HttpErrorManager implements HttpErrorManagerBase {
       if (contentType?.includes(this.contentType.ARRAY_BUFFER)) {
         const encoder = new TextEncoder();
         const buffer = encoder.encode(dataText).buffer;
-        throw new HttpErrorArrayBuffer(response.status, buffer);
+        throw new ErrorArrayBuffer(response.status, buffer);
       }
 
       if (contentType?.includes(this.contentType.TEXT)) {
-        throw new HttpErrorJSON(dataText, response.status, dataText);
+        throw new ErrorJSON(dataText, response.status, dataText);
       }
 
       let errorJSON;
@@ -32,7 +33,7 @@ export class HttpErrorManager implements HttpErrorManagerBase {
 
       if (errorJSON) {
         const defaultMessage = 'Unknown error please check details field';
-        throw new HttpErrorJSON(errorJSON?.message ?? defaultMessage, response.status, errorJSON);
+        throw new ErrorJSON(errorJSON?.message ?? defaultMessage, response.status, errorJSON);
       }
     }
 
@@ -42,14 +43,11 @@ export class HttpErrorManager implements HttpErrorManagerBase {
       details: 'No response for details',
     };
 
-    throw new HttpErrorJSON(error.message, error.status, error.details);
+    throw new ErrorJSON(error.message, error.status, error.details);
   }
 
   public parse<Data>(errorData: unknown): HttpResponseFull<Data> {
-    const isJsonError = errorData instanceof HttpErrorJSON;
-    const isArrayBufferError = errorData instanceof HttpErrorArrayBuffer;
-
-    if (isJsonError || isArrayBufferError) {
+    if (ErrorManager.isHttpError(errorData)) {
       return {
         original: null,
         data: null,
@@ -58,5 +56,11 @@ export class HttpErrorManager implements HttpErrorManagerBase {
     }
 
     throw errorData;
+  }
+
+  public static isHttpError(error: unknown): error is HttpError {
+    const isObject = typeof error === 'object' && error !== null;
+
+    return isObject && 'message' in error && 'status' in error;
   }
 }

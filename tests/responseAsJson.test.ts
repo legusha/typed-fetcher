@@ -7,53 +7,53 @@ const BASE_URL = config.BASE_URL
 const errorManager = new HttpErrorManager()
 const httpClient = new HttpClient(errorManager)
 
-httpClient.applySettings({baseUrl: BASE_URL, responseAs: 'text'})
+httpClient.applySettings({baseUrl: BASE_URL, responseAs: 'json'})
 
-test('GET User as text', async () => {
+test('GET User as json', async () => {
   const { data, error } = await httpClient.get<string>(
     `/user`,
     undefined,
   )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  expect(data).toEqual(staticData.USER);
 });
 
-test('POST User as text', async () => {
+test('POST User as json', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.post<string>(
     `/user`,
     { body },
   )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  expect(data).toEqual(staticData.USER);
 })
 
-test('PUT User as text', async () => {
+test('PUT User as json', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.put<string>(
     `/user`,
     { body },
   )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  expect(data).toEqual(staticData.USER);
 })
 
-test('DELETE User as text', async () => {
+test('DELETE User as json', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.delete<string>(
     `/user`,
     { body },
   )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  expect(data).toEqual(staticData.USER);
 })
 
-test('PATCH User as text', async () => {
+test('PATCH User as json', async () => {
   const body = staticData.USER
   const { data, error } = await httpClient.patch<string>(
     `/user`,
     { body },
   )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  expect(data).toEqual(staticData.USER);
 })

@@ -8,6 +8,14 @@ export class HttpClientSettings {
     return {
       responseAs: RESPONSE_AS.json,
       baseUrl: '',
+      // delays: [600, 3000, 6000, 9000],
+      // totalWaitTime: 60000,
+      // retryBy: [429, 500, 524],
+      // circuitBreaker: {
+      //   failureThreshold: 3,
+      //   successThreshold: 1,
+      //   timeout: 10000,
+      // },
     };
   }
 
