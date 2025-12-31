@@ -17,6 +17,8 @@ Its customizable error management and provider system make it suitable for a wid
 - [x] No dependencies
 - [x] Custom fetch providers (if need)
 - [x] Custom error handling (if need)
+- [x] Retry request with convenient configuration
+- [x] Retry request with Circuit Breaker and convenient configuration
 
 > Supports the following HTTP methods: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`, `HEAD`, `OPTIONS`
 
@@ -160,6 +162,64 @@ const settingsForConcreteRequest = {
 const { data, error } = await httpClient
   .get<SomeInterface>('/some-endpoint', {}, settingsForConcreteRequest);
 ```
+
+### Timeout and Circuit Breaker
+
+You can configure retry attempts and circuit breaker to handle network instability.
+
+**Retry only:**
+```typescript
+const settings = {
+  responseAs: 'json',
+  timeout: {
+    retry: {
+      errorStatus: [429, 500, 524],
+      delays: [600, 3000, 6000, 9000],
+      totalWaitTime: 60000,
+    }
+  }
+}
+
+httpClient.applySettings(settings); // or pass to individual request
+```
+
+**Retry + Circuit Breaker:**
+```typescript
+const settings = {
+  responseAs: 'json',
+  timeout: {
+    retry: {
+      errorStatus: [429, 500, 524],
+      delays: [600, 3000, 6000, 9000],
+      totalWaitTime: 60000,
+    },
+    circuitBreaker: {
+      failureThreshold: 3,
+      successThreshold: 1,
+      timeout: 3000,
+    }
+  }
+}
+
+httpClient.applySettings(settings); // or pass to individual request
+```
+
+### Settings Parameters
+By default retry requests and circuit breaker are ***disabled***
+
+| Parameter Name | Type | Description |
+| :--- | :--- | :--- |
+| `responseAs` | `'json' \| 'text' \| 'arrayBuffer'` | Determines how the response body is parsed. Default is `'json'`. |
+| `baseUrl` | `string` | Base URL to be prepended to all request URLs. Optional. |
+| `timeout` | `object` | Configuration object for retry policies and circuit breaker. Optional. |
+| `timeout.retry` | `object` | Retry strategy configuration. Required if `timeout` is defined. |
+| `timeout.retry.errorStatus` | `number[]` | List of HTTP status codes that trigger a retry (e.g., `[429, 500, 524]`). |
+| `timeout.retry.delays` | `number[]` | Array of delays (in ms) between retry attempts. |
+| `timeout.retry.totalWaitTime` | `number` | Maximum amount of time (in ms) to wait for retries before giving up. |
+| `timeout.circuitBreaker` | `object` | Circuit breaker configuration to prevent cascading failures. Optional. |
+| `timeout.circuitBreaker.failureThreshold` | `number` | Number of failed requests before the circuit opens. |
+| `timeout.circuitBreaker.successThreshold` | `number` | Number of successful requests required to close the circuit. |
+| `timeout.circuitBreaker.timeout` | `number` | Duration (in ms) to wait in the open state before attempting a reset (half-open). |
 
 ### Rewrite fetch provider or error manager
 If you want to rewrite implementation with fetch provider you should pass your provider to second argument, all example you can find it below in the documentation
