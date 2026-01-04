@@ -13,10 +13,10 @@ Its customizable error management and provider system make it suitable for a wid
 - [x] Typed responses
 - [x] Error handling
 - [x] No need try/catch
-- [x] Not need JSON.stringify/parse for body
+- [x] No need for JSON.stringify/parse for body
 - [x] No dependencies
-- [x] Custom fetch providers (if need)
-- [x] Custom error handling (if need)
+- [x] Custom fetch providers (if needed)
+- [x] Custom error handling (if needed)
 - [x] Retry request with convenient configuration
 - [x] Retry request with Circuit Breaker and convenient configuration
 
@@ -40,23 +40,23 @@ Its customizable error management and provider system make it suitable for a wid
 
 import { httpClient } from 'typed-fetcher';
 
-const { data, error } = await httpClient.get<SomeInterface>('https://examplt.com');
+const { data, error } = await httpClient.get<SomeInterface>('https://example.com');
 ```
 
 ### CommonJS
 ```typescript
 const { httpClient } = require('typed-fetcher')
 
-const { data, error } = await httpClient.get<SomeInterface>('https://examplt.com');
+const { data, error } = await httpClient.get<SomeInterface>('https://example.com');
 ```
 
 ### HTML script
 ```html
-<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.9/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.11/dist/index.umd.js"></script>
 <script>
     const { httpClient } = window.typedFetcher
     
-    const { data, error } = await httpClient.get<SomeInterface>('https://examplt.com');
+    const { data, error } = await httpClient.get<SomeInterface>('https://example.com');
 </script>
 })()
 ```
@@ -64,7 +64,7 @@ const { data, error } = await httpClient.get<SomeInterface>('https://examplt.com
 ## Usage
 
 ### Response data
-Pass the some interface to the request, and it will be returned as a response in data property
+Pass an interface to the request, and it will be returned as a response in data property
 ```typescript
 import { httpClient } from 'typed-fetcher';
 
@@ -103,12 +103,12 @@ interface HttpErrorBase {
 }
 ```
 
-**Origin field** is a reference on response object, if you are need to get reference on response object you can use `fetchGet, fetchPost` and etc property whose name starts with `fetch`:
+**Origin field** is a reference to the response object, if you are need to get reference on response object you can use `fetchGet, fetchPost` and etc property whose name starts with `fetch`:
 ```typescript
 const { data, error, origin } = await httpClient.fetchGet<SomeInterface>('https://some-api.com/some-endpoint');
 ````
 
-Apply **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for every requests,the body and method will ignored because it is not needed.
+Apply **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for every request; the body and method will ignored because it is not needed.
 ```typescript
 const exampleToken = ''
 const options = {
@@ -123,12 +123,12 @@ const options = {
 httpClient.applyOptions(options)
 ```
 
-Unapply **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for every requests
+Unapply **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for every request
 ```typescript
 httpClient.unapplyOptions()
 ```
 
-Rewrite **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for concrete request.You can rewrite options for some request, it applies only for this request once. The body will be converted to JSON automatically if **responseAs** setting is **json** and method will be ignored because it is not needed.
+Rewrite **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit)** for concrete request. You can rewrite options for some request, it applies only for this request once. The body will be converted to JSON automatically if **responseAs** setting is **json** and method will be ignored because it is not needed.
 ```typescript
 const optionsForConcreteRequest = {
   credentials: 'omit',
@@ -137,7 +137,7 @@ const { data, error } = await httpClient
   .get<SomeInterface>('https://some-api.com/some-endpoint', optionsForConcreteRequest);
 ```
 
-Apply **settings** for every requests
+Apply **settings** for every request
 ```typescript
 const settings = {
   responseAs: 'json' | 'text' | 'arrayBuffer',
@@ -148,12 +148,12 @@ const settings = {
 httpClient.applySettings(options)
 ```
 
-Unapply **settings** for every requests
+Unapply **settings** for every request
 ```typescript
 httpClient.unapplySettings()
 ```
 
-Rewrite **settings** for concrete request.You can rewrite **settings** for some request, it applies only for this request once.
+Rewrite **settings** for concrete request. You can rewrite **settings** for some request, it applies only for this request once.
 ```typescript
 const settingsForConcreteRequest = {
   responseAs: 'text',
