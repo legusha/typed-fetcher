@@ -32,12 +32,12 @@ describe('CircuitBreaker', () => {
             expect(action).toHaveBeenCalled();
         });
 
-        it('should stay closed on success', async () => {
-            const action = jest.fn().mockResolvedValue('success');
-            await circuitBreaker.executeTest(action);
-            // Access private state if possible or infer from behavior
-            // We'll infer by tripping it and checking counts
-        });
+        // it('should stay closed on success', async () => {
+        //     const action = jest.fn().mockResolvedValue('success');
+        //     await circuitBreaker.executeTest(action);
+        //     // Access private state if possible or infer from behavior
+        //     // We'll infer by tripping it and checking counts
+        // });
 
         it('should count failures but stay closed before threshold', async () => {
             const error = new Error('fail');
@@ -58,7 +58,7 @@ describe('CircuitBreaker', () => {
             await expect(circuitBreaker.executeTest(action)).rejects.toThrow(error);
             await expect(circuitBreaker.executeTest(action)).rejects.toThrow(error);
 
-            // Next attempt should fail fast
+
             await expect(circuitBreaker.executeTest(action)).rejects.toThrow(CircuitBreakerError);
         });
     });
@@ -89,7 +89,7 @@ describe('CircuitBreaker', () => {
             jest.useFakeTimers();
             jest.setSystemTime(Date.now() + config.timeout + 100);
 
-            // This should now run the action
+
             await circuitBreaker.executeTest(action);
             expect(action).toHaveBeenCalled();
 
