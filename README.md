@@ -1,6 +1,11 @@
 # Typed-fetcher
 
+[![npm badge][npm-badge-png]][package-url]
+
 Typed-fetcher is a scalable and flexible package for **typed HTTP requests**.
+
+[npm-badge-png]: https://nodei.co/npm/typed-fetcher.png?downloads=true&stars=true
+[package-url]: https://npmjs.org/package/typed-fetcher
 
 ### Description
 Typed-fetcher is a lightweight, dependency-free TypeScript package for making fully typed HTTP requests.
