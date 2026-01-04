@@ -9,51 +9,53 @@ const httpClient = new HttpClient(errorManager)
 
 httpClient.applySettings({baseUrl: BASE_URL, responseAs: 'text'})
 
-test('GET User as text', async () => {
-  const { data, error } = await httpClient.get<string>(
-    `/user`,
-    undefined,
-  )
+describe('Response as Text', () => {
+  test('GET User as text', async () => {
+    const { data, error } = await httpClient.get<string>(
+      `/user`,
+      undefined,
+    )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
-});
+    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  });
 
-test('POST User as text', async () => {
-  const body = staticData.USER
-  const { data, error } = await httpClient.post<string>(
-    `/user`,
-    { body },
-  )
+  test('POST User as text', async () => {
+    const body = staticData.USER
+    const { data, error } = await httpClient.post<string>(
+      `/user`,
+      { body },
+    )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
-})
+    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  })
 
-test('PUT User as text', async () => {
-  const body = staticData.USER
-  const { data, error } = await httpClient.put<string>(
-    `/user`,
-    { body },
-  )
+  test('PUT User as text', async () => {
+    const body = staticData.USER
+    const { data, error } = await httpClient.put<string>(
+      `/user`,
+      { body },
+    )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
-})
+    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  })
 
-test('DELETE User as text', async () => {
-  const body = staticData.USER
-  const { data, error } = await httpClient.delete<string>(
-    `/user`,
-    { body },
-  )
+  test('DELETE User as text', async () => {
+    const body = staticData.USER
+    const { data, error } = await httpClient.delete<string>(
+      `/user`,
+      { body },
+    )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
-})
+    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  })
 
-test('PATCH User as text', async () => {
-  const body = staticData.USER
-  const { data, error } = await httpClient.patch<string>(
-    `/user`,
-    { body },
-  )
+  test('PATCH User as text', async () => {
+    const body = staticData.USER
+    const { data, error } = await httpClient.patch<string>(
+      `/user`,
+      { body },
+    )
 
-  expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+  })
 })
