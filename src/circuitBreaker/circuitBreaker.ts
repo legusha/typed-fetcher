@@ -57,6 +57,7 @@ export class CircuitBreaker {
 
         return;
       }
+
       throw new CircuitBreakerError(CircuitBreakerError.TYPE.open);
     }
   }

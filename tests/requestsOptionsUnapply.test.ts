@@ -11,7 +11,7 @@ httpClient.applySettings({ baseUrl: BASE_URL, responseAs: 'json' })
 httpClient.applyOptions({ headers: staticData.HEADERS })
 httpClient.unapplyOptions()
 
-describe('Unapply options', () => {
+describe('GET User unapply options', () => {
   test('GET User check unapply options', async () => {
     const { data, error } = await httpClient.get<User>(
       `/user`,

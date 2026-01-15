@@ -35,6 +35,7 @@ export class HttpClientNormalizer {
   }
 
   private normalizeBody(body: RequestOptionsInput['body']): RequestOptions['body'] {
+    // TODO add matcher
     if (body && body instanceof ArrayBuffer) {
       return body;
     }
@@ -56,7 +57,7 @@ export class HttpClientNormalizer {
     }
 
     if (body && body instanceof FormData) {
-      return body.toString();
+      return body;
     }
 
     if (body) {

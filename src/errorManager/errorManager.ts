@@ -12,38 +12,15 @@ export class ErrorManager implements HttpErrorManagerBase {
 
   public throw(response: Response, dataText: string): never {
     if (dataText) {
-      const contentType = response.headers.get('content-type');
+      const contentTypeHeaderName = 'content-type';
+      const contentType = response.headers.get(contentTypeHeaderName);
 
-      if (contentType?.includes(this.contentType.ARRAY_BUFFER)) {
-        const encoder = new TextEncoder();
-        const buffer = encoder.encode(dataText).buffer;
-        throw new ErrorArrayBuffer(response.status, buffer);
-      }
-
-      if (contentType?.includes(this.contentType.TEXT)) {
-        throw new ErrorJSON(dataText, response.status, dataText);
-      }
-
-      let errorJSON;
-      try {
-        errorJSON = JSON.parse(dataText);
-      } catch (e) {
-        /* empty */
-      }
-
-      if (errorJSON) {
-        const defaultMessage = 'Unknown error please check details field';
-        throw new ErrorJSON(errorJSON?.message ?? defaultMessage, response.status, errorJSON);
-      }
+      this.throwErrorIfContentTypeArrayBuffer(dataText, response, contentType)
+        .throwErrorIfContentTypeText(dataText, response, contentType)
+        .throwErrorIfContentJson(dataText, response);
     }
 
-    const error = {
-      status: response.status,
-      message: response.statusText,
-      details: 'No response for details',
-    };
-
-    throw new ErrorJSON(error.message, error.status, error.details);
+    this.throwDefaultError(response);
   }
 
   public parse<Data>(errorData: unknown): HttpResponseFull<Data> {
@@ -62,5 +39,47 @@ export class ErrorManager implements HttpErrorManagerBase {
     const isObject = typeof error === 'object' && error !== null;
 
     return isObject && 'message' in error && 'status' in error;
+  }
+
+  private throwErrorIfContentTypeArrayBuffer(
+    dataText: string,
+    response: Response,
+    contentType: string | null,
+  ): never | this {
+    if (contentType?.includes(this.contentType.ARRAY_BUFFER)) {
+      const encoder = new TextEncoder();
+      const buffer = encoder.encode(dataText).buffer;
+      throw new ErrorArrayBuffer(response.status, buffer);
+    }
+
+    return this;
+  }
+
+  private throwErrorIfContentTypeText(dataText: string, response: Response, contentType: string | null): never | this {
+    if (contentType?.includes(this.contentType.TEXT)) {
+      throw new ErrorJSON(dataText, response.status, dataText);
+    }
+
+    return this;
+  }
+
+  private throwErrorIfContentJson(dataText: string, response: Response): never | void {
+    let errorJSON;
+    try {
+      errorJSON = JSON.parse(dataText);
+    } catch (e) {
+      /* empty */
+    }
+
+    if (errorJSON) {
+      const defaultMessage = 'Unknown error please check details field';
+      throw new ErrorJSON(errorJSON?.message ?? defaultMessage, response.status, errorJSON);
+    }
+  }
+
+  private throwDefaultError(response: Response): never {
+    const defaultDetails = 'No response for details';
+
+    throw new ErrorJSON(response.statusText, response.status, defaultDetails);
   }
 }
