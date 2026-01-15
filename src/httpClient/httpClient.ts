@@ -13,7 +13,7 @@ import type {
 import { REQUEST_METHOD } from './httpClient.types';
 import { HttpClientNormalizer } from './httpClientNormalizer';
 
-import { HttpClientRetry } from '../httpClientRetry/httpClientRetry';
+import { HttpClientRetry } from '../httpClientRetry';
 import type { Settings } from '../htttpClientSetting';
 import { HttpClientSettings, RESPONSE_AS } from '../htttpClientSetting';
 import { FetchProvider } from '../provider';

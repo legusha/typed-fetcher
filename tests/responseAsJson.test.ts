@@ -13,7 +13,6 @@ describe('Response as JSON', () => {
   test('GET User as json', async () => {
     const { data, error } = await httpClient.get<string>(
       `/user`,
-      undefined,
     )
 
     expect(data).toEqual(staticData.USER);

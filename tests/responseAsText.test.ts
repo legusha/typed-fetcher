@@ -7,7 +7,8 @@ const BASE_URL = config.BASE_URL
 const errorManager = new HttpErrorManager()
 const httpClient = new HttpClient(errorManager)
 
-httpClient.applySettings({baseUrl: BASE_URL, responseAs: 'text'})
+httpClient.applySettings({ baseUrl: BASE_URL, responseAs: 'text' })
+const notCorrectData = '[]'
 
 describe('Response as Text', () => {
   test('GET User as text', async () => {
@@ -16,7 +17,7 @@ describe('Response as Text', () => {
       undefined,
     )
 
-    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+    expect(JSON.parse(data ?? notCorrectData)).toEqual(staticData.USER);
   });
 
   test('POST User as text', async () => {
@@ -26,7 +27,7 @@ describe('Response as Text', () => {
       { body },
     )
 
-    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+    expect(JSON.parse(data ?? notCorrectData)).toEqual(staticData.USER);
   })
 
   test('PUT User as text', async () => {
@@ -36,7 +37,7 @@ describe('Response as Text', () => {
       { body },
     )
 
-    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+    expect(JSON.parse(data ?? notCorrectData)).toEqual(staticData.USER);
   })
 
   test('DELETE User as text', async () => {
@@ -46,7 +47,7 @@ describe('Response as Text', () => {
       { body },
     )
 
-    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+    expect(JSON.parse(data ?? notCorrectData)).toEqual(staticData.USER);
   })
 
   test('PATCH User as text', async () => {
@@ -56,6 +57,6 @@ describe('Response as Text', () => {
       { body },
     )
 
-    expect(JSON.parse(data ?? '')).toEqual(staticData.USER);
+    expect(JSON.parse(data ?? notCorrectData)).toEqual(staticData.USER);
   })
 })

@@ -1,2 +1,2 @@
-export {config} from './config'
+export { config } from './config'
 export * from './data'

@@ -13,8 +13,6 @@ describe('Base url', () => {
   test('GET User', async () => {
     const { data, error } = await httpClient.get<User>(
       `/user`,
-      undefined,
-      { responseAs: 'json' },
     )
 
     expect(data).toEqual(staticData.USER);
@@ -25,7 +23,6 @@ describe('Base url', () => {
     const { data, error } = await httpClient.post<User>(
       `/user`,
       { body },
-      { responseAs: 'json' },
     )
 
     expect(data).toEqual(staticData.USER);
@@ -36,7 +33,6 @@ describe('Base url', () => {
     const { data, error } = await httpClient.put<User>(
       `/user`,
       { body },
-      { responseAs: 'json' },
     )
 
     expect(data).toEqual(staticData.USER);
@@ -47,7 +43,6 @@ describe('Base url', () => {
     const { data, error } = await httpClient.delete<User>(
       `/user`,
       { body },
-      { responseAs: 'json' },
     )
 
     expect(data).toEqual(staticData.USER);
@@ -58,7 +53,6 @@ describe('Base url', () => {
     const { data, error } = await httpClient.patch<User>(
       `/user`,
       { body },
-      { responseAs: 'json' },
     )
 
     expect(data).toEqual(staticData.USER);
@@ -68,7 +62,6 @@ describe('Base url', () => {
     const { data, error } = await httpClient.head(
       `/user`,
       undefined,
-      { responseAs: 'json' },
     )
 
     expect(data?.get('X-Custom-Header')).toEqual(staticData.HEADERS['X-Custom-Header']);
