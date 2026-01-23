@@ -12,4 +12,5 @@ export interface Settings {
   responseAs: ResponseAs;
   baseUrl?: string;
   timeout?: HttpClientTimeoutConfig;
+  catchError?: boolean;
 }

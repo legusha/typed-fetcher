@@ -1,6 +1,7 @@
 import { ErrorArrayBuffer, ErrorJSON } from '../error';
 import type { HttpError } from '../error/errorBase';
 import type { HttpErrorManagerBase, HttpResponseFull } from '../httpClient';
+import type { Settings } from '../htttpClientSetting';
 
 export class ErrorManager implements HttpErrorManagerBase {
   private readonly contentType = {
@@ -23,8 +24,12 @@ export class ErrorManager implements HttpErrorManagerBase {
     this.throwDefaultError(response);
   }
 
-  public parse<Data>(errorData: unknown): HttpResponseFull<Data> {
-    if (ErrorManager.isHttpError(errorData)) {
+  public parse<Data>(errorData: unknown, settings: Settings): HttpResponseFull<Data> {
+    if (settings.catchError === false && ErrorManager.isKnownError(errorData)) {
+      throw errorData;
+    }
+
+    if (ErrorManager.isKnownError(errorData)) {
       return {
         original: null,
         data: null,
@@ -35,7 +40,7 @@ export class ErrorManager implements HttpErrorManagerBase {
     throw errorData;
   }
 
-  public static isHttpError(error: unknown): error is HttpError {
+  public static isKnownError(error: unknown): error is HttpError {
     const isObject = typeof error === 'object' && error !== null;
 
     return isObject && 'message' in error && 'status' in error;
@@ -51,7 +56,7 @@ export class ErrorManager implements HttpErrorManagerBase {
       const buffer = encoder.encode(dataText).buffer;
       throw new ErrorArrayBuffer(response.status, buffer);
     }
-
+``
     return this;
   }
 

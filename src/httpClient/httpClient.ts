@@ -4,6 +4,8 @@ import type {
   HttpErrorManagerBase,
   HttpFetchProvider,
   HttpResponse,
+  HttpResponseSuccess,
+  HttpResponseSuccessFull,
   HttpResponseFull,
   RequestMethod,
   RequestParams,
@@ -27,6 +29,12 @@ export class HttpClient implements HttpClientBase {
     private readonly fetchProvider: HttpFetchProvider = new FetchProvider(),
   ) {}
 
+  public get<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccess<Data>>;
+  public get<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async get<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -35,6 +43,12 @@ export class HttpClient implements HttpClientBase {
     return await this.fetchData<Data>(REQUEST_METHOD.GET, url, options, setting);
   }
 
+  public post<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccess<Data>>;
+  public post<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async post<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -43,6 +57,12 @@ export class HttpClient implements HttpClientBase {
     return await this.fetchData<Data>(REQUEST_METHOD.POST, url, options, setting);
   }
 
+  public put<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccess<Data>>;
+  public put<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async put<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -51,6 +71,12 @@ export class HttpClient implements HttpClientBase {
     return await this.fetchData<Data>(REQUEST_METHOD.PUT, url, options, setting);
   }
 
+  public patch<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccess<Data>>;
+  public patch<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async patch<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -59,6 +85,12 @@ export class HttpClient implements HttpClientBase {
     return await this.fetchData<Data>(REQUEST_METHOD.PATCH, url, options, setting);
   }
 
+  public delete<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccess<Data>>;
+  public delete<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async delete<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -67,6 +99,12 @@ export class HttpClient implements HttpClientBase {
     return await this.fetchData<Data>(REQUEST_METHOD.DELETE, url, options, setting);
   }
 
+  public head(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccess<Headers>>;
+  public head(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Headers>>;
   public async head(
     url: Url,
     options?: RequestOptionsInput,
@@ -75,6 +113,12 @@ export class HttpClient implements HttpClientBase {
     return await this.fetchHeaders(REQUEST_METHOD.HEAD, url, options, setting);
   }
 
+  public options(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccess<Headers>>;
+  public options(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Headers>>;
   public async options(
     url: Url,
     options?: RequestOptionsInput,
@@ -83,6 +127,12 @@ export class HttpClient implements HttpClientBase {
     return await this.fetchHeaders(REQUEST_METHOD.OPTIONS, url, options, setting);
   }
 
+  public fetchGet<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccessFull<Data>>;
+  public fetchGet<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
   public async fetchGet<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -91,6 +141,12 @@ export class HttpClient implements HttpClientBase {
     return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.GET, url, options, setting);
   }
 
+  public fetchPost<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccessFull<Data>>;
+  public fetchPost<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
   public async fetchPost<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -99,6 +155,12 @@ export class HttpClient implements HttpClientBase {
     return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.POST, url, options, setting);
   }
 
+  public fetchPut<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccessFull<Data>>;
+  public fetchPut<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
   public async fetchPut<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -107,6 +169,12 @@ export class HttpClient implements HttpClientBase {
     return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.PUT, url, options, setting);
   }
 
+  public fetchPatch<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccessFull<Data>>;
+  public fetchPatch<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
   public async fetchPatch<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -115,6 +183,16 @@ export class HttpClient implements HttpClientBase {
     return await this.maybeFetchWithRetry(REQUEST_METHOD.PATCH, url, options, setting);
   }
 
+  public fetchDelete<Data>(
+    url: Url,
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccessFull<Data>>;
+  public fetchDelete<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    setting?: Settings,
+  ): Promise<HttpResponseFull<Data>>;
   public async fetchDelete<Data>(
     url: Url,
     options?: RequestOptionsInput,
@@ -125,17 +203,21 @@ export class HttpClient implements HttpClientBase {
 
   public fetchHead(
     url: Url,
-    options?: RequestOptionsInput,
-    setting = this.setting.get(),
-  ): Promise<HttpResponseFull<null>> {
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccessFull<null>>;
+  public fetchHead(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<null>>;
+  public async fetchHead(url: Url, options?: RequestOptionsInput, setting = this.setting.get()): Promise<any> {
     return this.maybeFetchWithRetry<null>(REQUEST_METHOD.HEAD, url, options, setting);
   }
 
   public fetchOptions(
     url: Url,
-    options?: RequestOptionsInput,
-    setting = this.setting.get(),
-  ): Promise<HttpResponseFull<null>> {
+    options: RequestOptionsInput,
+    setting: Settings & { catchError: false },
+  ): Promise<HttpResponseSuccessFull<null>>;
+  public fetchOptions(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<null>>;
+  public async fetchOptions(url: Url, options?: RequestOptionsInput, setting = this.setting.get()): Promise<any> {
     return this.maybeFetchWithRetry<null>(REQUEST_METHOD.OPTIONS, url, options, setting);
   }
 
@@ -199,7 +281,7 @@ export class HttpClient implements HttpClientBase {
 
       this.errorManager.throw(response, dataAsText);
     } catch (e) {
-      return this.errorManager.parse<Data>(e);
+      return this.errorManager.parse<Data>(e, requestSetting);
     }
   }
 

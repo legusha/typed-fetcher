@@ -8,6 +8,7 @@ export class HttpClientSettings {
     return {
       responseAs: RESPONSE_AS.json,
       baseUrl: '',
+      catchError: true,
       // delays: [600, 3000, 6000, 9000],
       // totalWaitTime: 60000,
       // retryBy: [429, 500, 524],

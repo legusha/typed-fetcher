@@ -91,7 +91,7 @@ export class HttpClientRetry extends CircuitBreaker {
 
         return result;
       } catch (error) {
-        if (this.isKnownRetryByError(error) || this.isKnownErrorCircuitBreaker(error)) {
+        if (this.isKnownRetryError(error) || this.isKnownErrorCircuitBreaker(error)) {
           console.error(error);
           const retryDelay = this.config.retry.delays[attempt] ?? this.config.retry.delays.at(-1) ?? this.delayDefault;
 
@@ -101,7 +101,7 @@ export class HttpClientRetry extends CircuitBreaker {
           continue;
         }
 
-        if (ErrorManager.isHttpError(error)) {
+        if (ErrorManager.isKnownError(error)) {
           return {
             data: null,
             error,
@@ -120,8 +120,8 @@ export class HttpClientRetry extends CircuitBreaker {
     return error instanceof CircuitBreakerError;
   }
 
-  private isKnownRetryByError(error: unknown): error is HttpError {
-    const isHttpError = ErrorManager.isHttpError(error);
+  private isKnownRetryError(error: unknown): error is HttpError {
+    const isHttpError = ErrorManager.isKnownError(error);
     const retryBy = this.config.retry.errorStatus;
 
     return isHttpError && retryBy.includes(error.status);
