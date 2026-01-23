@@ -3,10 +3,11 @@
     "target": "esnext",
     "lib": ["ESNext", "dom"],
     "module": "commonjs",
-    "rootDir": ".",
+    "rootDir": "./src",
     "moduleResolution": "node10",
     "baseUrl": "./",
     "declaration": true,
+    "declarationDir": "dist/types",
     "sourceMap": true,
     "outDir": "./dist/",
     "esModuleInterop": true,
@@ -16,9 +17,6 @@
     "strictNullChecks": true,
     "alwaysStrict": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "skipLibCheck": true,
-    "allowJs": true,
   },
   "include": ["src"]
 }
