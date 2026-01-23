@@ -15,7 +15,7 @@
     "import": "./dist/index.js",
     "require": "./dist/index.cjs"
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/legusha/typed-fetcher.git"
