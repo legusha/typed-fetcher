@@ -25,7 +25,7 @@ export class ErrorManager implements HttpErrorManagerBase {
   }
 
   public parse<Data>(errorData: unknown, settings: Settings): HttpResponseFull<Data> {
-    if (settings.catchError === false && ErrorManager.isKnownError(errorData)) {
+    if (!settings.catchError && ErrorManager.isKnownError(errorData)) {
       throw errorData;
     }
 

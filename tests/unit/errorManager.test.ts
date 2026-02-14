@@ -120,6 +120,13 @@ describe('ErrorManager', () => {
     });
   });
 
+  describe('parse with catch error off', () => {
+    it('should rethrow if catch error false', () => {
+      const error = new Error('regular error');
+      expect(() => errorManager.parse(error, { responseAs: 'json', catchError: false })).toThrow(error);
+    });
+  });
+
   describe('isHttpError', () => {
     it('should return true for ErrorJSON', () => {
       const error = new ErrorJSON('test', 200, null);

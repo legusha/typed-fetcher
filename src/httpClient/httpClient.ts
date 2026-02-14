@@ -164,7 +164,7 @@ export class HttpClient implements HttpClientBase {
   ): Promise<Headers> {
     const settings = this.setting.generateCatchErrorOff(inputSettings);
 
-    const { data } = await this.fetchData<Headers>(REQUEST_METHOD.HEAD, url, settings, options);
+    const { data } = await this.fetchHeaders(REQUEST_METHOD.HEAD, url, settings, options);
 
     return data!;
   }
@@ -176,7 +176,7 @@ export class HttpClient implements HttpClientBase {
   ): Promise<Headers> {
     const settings = this.setting.generateCatchErrorOff(inputSettings);
 
-    const { data } = await this.fetchData<Headers>(REQUEST_METHOD.OPTIONS, url, settings, options);
+    const { data } = await this.fetchHeaders(REQUEST_METHOD.OPTIONS, url, settings, options);
 
     return data!;
   }
