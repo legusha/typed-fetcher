@@ -56,7 +56,7 @@ export class ErrorManager implements HttpErrorManagerBase {
       const buffer = encoder.encode(dataText).buffer;
       throw new ErrorArrayBuffer(response.status, buffer);
     }
-``
+
     return this;
   }
 

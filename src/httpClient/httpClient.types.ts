@@ -1,5 +1,5 @@
 import type { HttpError } from '../error/errorBase';
-import type { Settings } from '../htttpClientSetting';
+import type { Settings, SettingWithCatchErrorFalse } from '../htttpClientSetting';
 
 export const REQUEST_METHOD = {
   GET: 'GET',
@@ -44,99 +44,99 @@ export type HttpResponseFull<Data> = HttpResponseSuccessFull<Data> | HttpRespons
 export interface HttpClientBase {
   get<Data>(
     url: Url,
-    options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    options: RequestOptionsInput | undefined,
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccess<Data>>;
   get<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
 
   post<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccess<Data>>;
   post<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
 
   put<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccess<Data>>;
   put<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
 
   patch<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccess<Data>>;
   patch<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
 
   delete<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccess<Data>>;
   delete<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
 
   head(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccess<Headers>>;
   head(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Headers>>;
 
   options(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccess<Headers>>;
   options(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Headers>>;
 
   fetchGet<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccessFull<Data>>;
   fetchGet<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
 
   fetchPost<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccessFull<Data>>;
   fetchPost<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
 
   fetchPut<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccessFull<Data>>;
   fetchPut<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
 
   fetchPatch<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccessFull<Data>>;
   fetchPatch<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
 
   fetchDelete<Data>(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccessFull<Data>>;
   fetchDelete<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
 
   fetchHead(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccessFull<null>>;
   fetchHead(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<null>>;
 
   fetchOptions(
     url: Url,
     options: RequestOptionsInput,
-    setting: Settings & { catchError?: false },
+    setting: SettingWithCatchErrorFalse,
   ): Promise<HttpResponseSuccessFull<null>>;
   fetchOptions(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<null>>;
 

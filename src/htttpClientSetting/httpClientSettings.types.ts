@@ -14,3 +14,5 @@ export interface Settings {
   timeout?: HttpClientTimeoutConfig;
   catchError?: boolean;
 }
+
+export type SettingWithCatchErrorFalse = Settings & { catchError: false };
