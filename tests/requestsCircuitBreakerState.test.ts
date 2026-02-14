@@ -25,7 +25,7 @@ const errorManager = new HttpErrorManager()
 
 const errorStatus = [429, 500, 524]
 
-describe.skip('Circuit Breaker State Integration (Per Request)', () => {
+describe('Circuit Breaker State Integration (Per Request)', () => {
     let spyProvider: SpyFetchProvider;
     let httpClient: HttpClient;
 

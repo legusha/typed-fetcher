@@ -12,7 +12,7 @@ httpClient.applySettings({ baseUrl: BASE_URL, responseAs: 'json' });
 
 const errorStatus = [429, 500, 524];
 
-describe.skip('Requests with retry', () => {
+describe('Requests with retry', () => {
   test('GET User check retry', async () => {
     const { data, error } = await httpClient.get<User>(`/user/retry`, undefined, {
       timeout: {
