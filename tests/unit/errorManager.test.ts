@@ -107,7 +107,7 @@ describe('ErrorManager', () => {
   describe('parse', () => {
     it('should return HttpResponseFull with error if input is HttpError', () => {
       const httpError = new ErrorJSON('test', 400, null);
-      const result = errorManager.parse(httpError, { responseAs: 'json' });
+      const result = errorManager.parse(httpError, { responseAs: 'json', catchError: true });
 
       expect(result.error).toBe(httpError);
       expect(result.data).toBeNull();
@@ -116,7 +116,7 @@ describe('ErrorManager', () => {
 
     it('should rethrow if input is not HttpError', () => {
       const regularError = new Error('regular error');
-      expect(() => errorManager.parse(regularError, { responseAs: 'json' })).toThrow(regularError);
+      expect(() => errorManager.parse(regularError, { responseAs: 'json', catchError: true })).toThrow(regularError);
     });
   });
 

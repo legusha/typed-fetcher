@@ -81,6 +81,7 @@ export const userHandlers = [
         'Access-Control-Allow-Headers':
           request.headers.get('Access-Control-Request-Headers') ?? '*',
         'Access-Control-Max-Age': '86400',
+        ...data.HEADERS,
       }
     })
   }),

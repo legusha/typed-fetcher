@@ -4,9 +4,9 @@ import {data as staticData, User} from "./setup/data";
 
 const BASE_URL = config.BASE_URL
 
-describe('Test request', () => {
-  test('GET User', async () => {
-    const { data, error } = await httpClient.get<User>(
+describe('Test request unsafe', () => {
+  test('GET unsafe User', async () => {
+    const data = await httpClient.getUnsafe<User>(
       `${BASE_URL}/user`,
       undefined,
       { responseAs: 'json' },
@@ -15,9 +15,10 @@ describe('Test request', () => {
     expect(data).toEqual(staticData.USER);
   });
 
-  test('POST User', async () => {
-    const body = staticData.USER
-    const { data, error } = await httpClient.post<User>(
+  test('POST unsafe User', async () => {
+    const body = staticData.USER;
+
+    const data = await httpClient.postUnsafe<User>(
       `${BASE_URL}/user`,
       { body },
       { responseAs: 'json' },
@@ -26,9 +27,10 @@ describe('Test request', () => {
     expect(data).toEqual(staticData.USER);
   })
 
-  test('PUT User', async () => {
-    const body = staticData.USER
-    const { data, error } = await httpClient.put<User>(
+  test('PUT unsafe User', async () => {
+    const body = staticData.USER;
+
+    const data = await httpClient.putUnsafe<User>(
       `${BASE_URL}/user`,
       { body },
       { responseAs: 'json' },
@@ -37,9 +39,10 @@ describe('Test request', () => {
     expect(data).toEqual(staticData.USER);
   })
 
-  test('DELETE User', async () => {
-    const body = staticData.USER
-    const { data, error } = await httpClient.delete<User>(
+  test('DELETE unsafe User', async () => {
+    const body = staticData.USER;
+
+    const data = await httpClient.deleteUnsafe<User>(
       `${BASE_URL}/user`,
       { body },
       { responseAs: 'json' },
@@ -48,9 +51,10 @@ describe('Test request', () => {
     expect(data).toEqual(staticData.USER);
   })
 
-  test('PATCH User', async () => {
-    const body = staticData.USER
-    const { data, error } = await httpClient.patch<User>(
+  test('PATCH unsafe User', async () => {
+    const body = staticData.USER;
+
+    const data = await httpClient.patchUnsafe<User>(
       `${BASE_URL}/user`,
       { body },
       { responseAs: 'json' },
@@ -59,8 +63,8 @@ describe('Test request', () => {
     expect(data).toEqual(staticData.USER);
   })
 
-  test('HEAD User', async () => {
-    const { data, error } = await httpClient.head(
+  test('HEAD unsafe User', async () => {
+    const data = await httpClient.headUnsafe(
       `${BASE_URL}/user`,
       undefined,
       { responseAs: 'json' },
@@ -69,8 +73,8 @@ describe('Test request', () => {
     expect(data?.get('X-Custom-Header')).toEqual(staticData.HEADERS['X-Custom-Header']);
   })
 
-  test('OPTIONS User', async () => {
-    const { data, error } = await httpClient.options(
+  test('OPTIONS unsafe User', async () => {
+    const data = await httpClient.optionsUnsafe(
       `${BASE_URL}/user`,
       undefined,
       { responseAs: 'json' },

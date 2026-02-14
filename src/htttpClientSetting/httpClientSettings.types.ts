@@ -8,11 +8,14 @@ export const RESPONSE_AS = {
 
 export type ResponseAs = (typeof RESPONSE_AS)[keyof typeof RESPONSE_AS];
 
-export interface Settings {
+export interface BaseSettings {
   responseAs: ResponseAs;
   baseUrl?: string;
   timeout?: HttpClientTimeoutConfig;
-  catchError?: boolean;
 }
 
-export type SettingWithCatchErrorFalse = Settings & { catchError: false };
+interface WithCatchError {
+  catchError: boolean;
+}
+
+export interface Settings extends BaseSettings, WithCatchError {}

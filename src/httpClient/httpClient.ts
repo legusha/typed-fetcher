@@ -3,8 +3,6 @@ import type {
   HttpErrorManagerBase,
   HttpFetchProvider,
   HttpResponse,
-  HttpResponseSuccess,
-  HttpResponseSuccessFull,
   HttpResponseFull,
   RequestMethod,
   RequestParams,
@@ -16,7 +14,7 @@ import { REQUEST_METHOD } from './httpClient.types';
 import { HttpClientNormalizer } from './httpClientNormalizer';
 
 import { HttpClientRetry } from '../httpClientRetry';
-import type { Settings, SettingWithCatchErrorFalse } from '../htttpClientSetting';
+import type { BaseSettings, Settings } from '../htttpClientSetting';
 import { HttpClientSettings, RESPONSE_AS } from '../htttpClientSetting';
 import { FetchProvider } from '../provider';
 
@@ -29,196 +27,228 @@ export class HttpClient implements HttpClientBase {
     private readonly fetchProvider: HttpFetchProvider = new FetchProvider(),
   ) {}
 
-  public get<Data>(
-    url: Url,
-    options: RequestOptionsInput | undefined,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccess<Data>>;
-  public get<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async get<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting: Settings = this.setting.get(),
+    inputSetting: BaseSettings = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchData<Data>(REQUEST_METHOD.GET, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSetting);
+
+    return await this.fetchData<Data>(REQUEST_METHOD.GET, url, settings, options);
   }
 
-  public post<Data>(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccess<Data>>;
-  public post<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async post<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchData<Data>(REQUEST_METHOD.POST, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.fetchData<Data>(REQUEST_METHOD.POST, url, settings, options);
   }
 
-  public put<Data>(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccess<Data>>;
-  public put<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async put<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchData<Data>(REQUEST_METHOD.PUT, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.fetchData<Data>(REQUEST_METHOD.PUT, url, settings, options);
   }
 
-  public patch<Data>(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccess<Data>>;
-  public patch<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async patch<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchData<Data>(REQUEST_METHOD.PATCH, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.fetchData<Data>(REQUEST_METHOD.PATCH, url, settings, options);
   }
 
-  public delete<Data>(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccess<Data>>;
-  public delete<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Data>>;
   public async delete<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    return await this.fetchData<Data>(REQUEST_METHOD.DELETE, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.fetchData<Data>(REQUEST_METHOD.DELETE, url, settings, options);
   }
 
-  public head(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccess<Headers>>;
-  public head(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Headers>>;
   public async head(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponse<Headers>> {
-    return await this.fetchHeaders(REQUEST_METHOD.HEAD, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.fetchHeaders(REQUEST_METHOD.HEAD, url, settings, options);
   }
 
-  public options(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccess<Headers>>;
-  public options(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponse<Headers>>;
   public async options(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponse<Headers>> {
-    return await this.fetchHeaders(REQUEST_METHOD.OPTIONS, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.fetchHeaders(REQUEST_METHOD.OPTIONS, url, settings, options);
   }
 
-  public fetchGet<Data>(
+  public async getUnsafe<Data>(
     url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccessFull<Data>>;
-  public fetchGet<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
+    options?: RequestOptionsInput,
+    inputSettings: BaseSettings = this.setting.get(),
+  ): Promise<Data> {
+    const settings = this.setting.generateCatchErrorOff(inputSettings);
+
+    const { data } = await this.fetchData<Data>(REQUEST_METHOD.GET, url, settings, options);
+
+    return data!;
+  }
+
+  public async postUnsafe<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    inputSettings: BaseSettings = this.setting.get(),
+  ): Promise<Data> {
+    const settings = this.setting.generateCatchErrorOff(inputSettings);
+
+    const { data } = await this.fetchData<Data>(REQUEST_METHOD.POST, url, settings, options);
+
+    return data!;
+  }
+
+  public async putUnsafe<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    inputSettings: BaseSettings = this.setting.get(),
+  ): Promise<Data> {
+    const settings = this.setting.generateCatchErrorOff(inputSettings);
+
+    const { data } = await this.fetchData<Data>(REQUEST_METHOD.PUT, url, settings, options);
+
+    return data!;
+  }
+
+  public async patchUnsafe<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    inputSettings: BaseSettings = this.setting.get(),
+  ): Promise<Data> {
+    const settings = this.setting.generateCatchErrorOff(inputSettings);
+
+    const { data } = await this.fetchData<Data>(REQUEST_METHOD.PATCH, url, settings, options);
+
+    return data!;
+  }
+
+  public async deleteUnsafe<Data>(
+    url: Url,
+    options?: RequestOptionsInput,
+    inputSettings: BaseSettings = this.setting.get(),
+  ): Promise<Data> {
+    const settings = this.setting.generateCatchErrorOff(inputSettings);
+
+    const { data } = await this.fetchData<Data>(REQUEST_METHOD.DELETE, url, settings, options);
+
+    return data!;
+  }
+
+  public async headUnsafe(
+    url: Url,
+    options?: RequestOptionsInput,
+    inputSettings: BaseSettings = this.setting.get(),
+  ): Promise<Headers> {
+    const settings = this.setting.generateCatchErrorOff(inputSettings);
+
+    const { data } = await this.fetchData<Headers>(REQUEST_METHOD.HEAD, url, settings, options);
+
+    return data!;
+  }
+
+  public async optionsUnsafe(
+    url: Url,
+    options?: RequestOptionsInput,
+    inputSettings: BaseSettings = this.setting.get(),
+  ): Promise<Headers> {
+    const settings = this.setting.generateCatchErrorOff(inputSettings);
+
+    const { data } = await this.fetchData<Headers>(REQUEST_METHOD.OPTIONS, url, settings, options);
+
+    return data!;
+  }
+
   public async fetchGet<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.GET, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.GET, url, settings, options);
   }
 
-  public fetchPost<Data>(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccessFull<Data>>;
-  public fetchPost<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
   public async fetchPost<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.POST, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.POST, url, settings, options);
   }
 
-  public fetchPut<Data>(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccessFull<Data>>;
-  public fetchPut<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
   public async fetchPut<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.PUT, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.PUT, url, settings, options);
   }
 
-  public fetchPatch<Data>(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccessFull<Data>>;
-  public fetchPatch<Data>(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<Data>>;
   public async fetchPatch<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.maybeFetchWithRetry(REQUEST_METHOD.PATCH, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.maybeFetchWithRetry(REQUEST_METHOD.PATCH, url, settings, options);
   }
 
-  public fetchDelete<Data>(
-    url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccessFull<Data>>;
-  public fetchDelete<Data>(
-    url: Url,
-    options?: RequestOptionsInput,
-    setting?: Settings,
-  ): Promise<HttpResponseFull<Data>>;
   public async fetchDelete<Data>(
     url: Url,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
+    inputSettings = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
-    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.DELETE, url, options, setting);
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return await this.maybeFetchWithRetry<Data>(REQUEST_METHOD.DELETE, url, settings, options);
   }
 
-  public fetchHead(
+  public async fetchHead(
     url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccessFull<null>>;
-  public fetchHead(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<null>>;
-  public async fetchHead(url: Url, options?: RequestOptionsInput, setting = this.setting.get()): Promise<any> {
-    return this.maybeFetchWithRetry<null>(REQUEST_METHOD.HEAD, url, options, setting);
+    options?: RequestOptionsInput,
+    inputSettings = this.setting.get(),
+  ): Promise<HttpResponseFull<null>> {
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return this.maybeFetchWithRetry<null>(REQUEST_METHOD.HEAD, url, settings, options);
   }
 
-  public fetchOptions(
+  public async fetchOptions(
     url: Url,
-    options: RequestOptionsInput,
-    setting: SettingWithCatchErrorFalse,
-  ): Promise<HttpResponseSuccessFull<null>>;
-  public fetchOptions(url: Url, options?: RequestOptionsInput, setting?: Settings): Promise<HttpResponseFull<null>>;
-  public async fetchOptions(url: Url, options?: RequestOptionsInput, setting = this.setting.get()): Promise<any> {
-    return this.maybeFetchWithRetry<null>(REQUEST_METHOD.OPTIONS, url, options, setting);
+    options?: RequestOptionsInput,
+    inputSettings = this.setting.get(),
+  ): Promise<HttpResponseFull<null>> {
+    const settings = this.setting.generateCatchErrorOn(inputSettings);
+
+    return this.maybeFetchWithRetry<null>(REQUEST_METHOD.OPTIONS, url, settings, options);
   }
 
   public applyOptions(options: StableOptions): void {
@@ -229,7 +259,7 @@ export class HttpClient implements HttpClientBase {
     this.normalizer.setOptions({});
   }
 
-  public applySettings(settings: Settings): void {
+  public applySettings(settings: BaseSettings): void {
     this.setting.set(settings);
   }
 
@@ -240,24 +270,24 @@ export class HttpClient implements HttpClientBase {
   private maybeFetchWithRetry<Data>(
     method: RequestMethod,
     url: Url,
+    settingInput: Settings,
     optionsInput?: RequestOptionsInput,
-    settingInput = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
     const requestSetting = this.setting.merge(settingInput);
 
     if (!requestSetting.timeout) {
-      return this.fetch(method, url, optionsInput, settingInput);
+      return this.fetch(method, url, settingInput, optionsInput);
     }
 
     const retry = new HttpClientRetry(requestSetting.timeout);
-    return retry.fetch<Data>(this.fetch.bind(this), method, url, optionsInput, settingInput);
+    return retry.fetch<Data>(this.fetch.bind(this), method, url, settingInput, optionsInput);
   }
 
   private async fetch<Data>(
     method: RequestMethod,
     url: Url,
+    settingInput: Settings,
     optionsInput?: RequestOptionsInput,
-    settingInput = this.setting.get(),
   ): Promise<HttpResponseFull<Data>> {
     const requestSetting = this.setting.merge(settingInput);
     const options = optionsInput ?? {};
@@ -288,10 +318,10 @@ export class HttpClient implements HttpClientBase {
   private async fetchData<Data>(
     method: RequestMethod,
     url: Url,
+    setting: Settings,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
   ): Promise<HttpResponse<Data>> {
-    const payload = await this.maybeFetchWithRetry<Data>(method, url, options, setting);
+    const payload = await this.maybeFetchWithRetry<Data>(method, url, setting, options);
 
     if (payload.error) {
       return {
@@ -309,16 +339,16 @@ export class HttpClient implements HttpClientBase {
   private async fetchHeaders(
     method: typeof REQUEST_METHOD.HEAD | typeof REQUEST_METHOD.OPTIONS,
     url: Url,
+    setting: Settings,
     options?: RequestOptionsInput,
-    setting = this.setting.get(),
   ): Promise<HttpResponse<Headers>> {
     const optionsWithNoBody = { ...options, body: undefined };
     const settingResponseAsText = { ...setting, responseAs: RESPONSE_AS.text };
     const { error, original } = await this.maybeFetchWithRetry<Headers>(
       method,
       url,
-      optionsWithNoBody,
       settingResponseAsText,
+      optionsWithNoBody,
     );
 
     if (error) {

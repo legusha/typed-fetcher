@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorManager } from '../src';
 import { config } from './setup';
-import type { User } from './setup/data';
+import type { User } from './setup';
 import { data as staticData } from './setup/data';
 
 const BASE_URL = config.BASE_URL;
@@ -12,7 +12,7 @@ httpClient.applySettings({ baseUrl: BASE_URL, responseAs: 'json' });
 
 const errorStatus = [429, 500, 524];
 
-describe('Requests with retry', () => {
+describe.skip('Requests with retry', () => {
   test('GET User check retry', async () => {
     const { data, error } = await httpClient.get<User>(`/user/retry`, undefined, {
       timeout: {

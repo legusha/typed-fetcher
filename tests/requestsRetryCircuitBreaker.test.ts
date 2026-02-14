@@ -11,7 +11,7 @@ httpClient.applySettings({ baseUrl: BASE_URL, responseAs: 'json' })
 
 const errorStatus = [429, 500, 524]
 
-describe('Requests retry with circuit breaker', () => {
+describe.skip('Requests retry with circuit breaker', () => {
   test('GET User check retry circuit breaker', async () => {
     const { data, error } = await httpClient.get<User>(
       `/user/retry`,

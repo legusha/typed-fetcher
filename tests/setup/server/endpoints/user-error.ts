@@ -42,17 +42,17 @@ export const userErrorHandlers = [
     );
   }),
 
-  http.options(`${BASE_URL}/user-error`, async () => {
+  http.head(`${BASE_URL}/user-error`, () => {
     return HttpResponse.json(
       { error: errorMessage },
       { status: statusCode }
     );
   }),
 
-  http.head(`${BASE_URL}/user-error`, () => {
+  http.options(`${BASE_URL}/user-error`, async () => {
     return HttpResponse.json(
       { error: errorMessage },
       { status: statusCode }
     );
-  })
+  }),
 ]

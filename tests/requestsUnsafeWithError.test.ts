@@ -24,24 +24,22 @@ const testServerError = (e: unknown): void => {
 }
 
 describe('Test without catch Error', () => {
-  test('GET without catch Error', async () => {
+  test('GET unsafe check error', async () => {
     try {
-      const { data } = await httpClient.get<User>(
+      await httpClient.getUnsafe<User>(
         `/user-error`,
         undefined,
-        { catchError: false, responseAs: 'json' }
       )
     } catch (e) {
       testServerError(e)
     }
   });
 
-  test('GET not found endpoint without catch Error', async () => {
+  test('GET not found endpoint unsafe check error', async () => {
     try {
-      const { data } = await httpClient.get<User>(
+      await httpClient.getUnsafe<User>(
         `/user-error/not-found`,
         undefined,
-        { catchError: false, responseAs: 'json' }
       )
     } catch (e) {
       const notFoundMessage = 'fetch failed'
@@ -50,52 +48,68 @@ describe('Test without catch Error', () => {
     }
   });
 
-  test('POST without catch Error', async () => {
+  test('POST unsafe check error', async () => {
     try {
       const body = staticData.USER
-      const { data } = await httpClient.post<User>(
+      await httpClient.postUnsafe<User>(
         `/user-error`,
         { body },
-        { catchError: false, responseAs: 'json' }
       )
     } catch (e) {
       testServerError(e)
     }
   })
 
-  test('PUT without catch Error', async () => {
+  test('PUT unsafe check error', async () => {
     try {
       const body = staticData.USER
-      const { data } = await httpClient.put<User>(
+      await httpClient.putUnsafe<User>(
         `/user-error`,
         { body },
-        { catchError: false, responseAs: 'json' }
       )
     } catch (e) {
       testServerError(e)
     }
   })
 
-  test('DELETE without catch Error', async () => {
+  test('DELETE unsafe check error', async () => {
     try {
       const body = staticData.USER
-      const { data } = await httpClient.delete<User>(
+      await httpClient.deleteUnsafe<User>(
         `/user-error`,
         { body },
-        { catchError: false, responseAs: 'json' }
       )
     } catch (e) {
       testServerError(e)
     }
   })
 
-  test('PATCH without catch Error', async () => {
+  test('PATCH unsafe check error', async () => {
     try {
       const body = staticData.USER
-      const { data } = await httpClient.patch<User>(
+      await httpClient.patchUnsafe<User>(
         `/user-error`,
         { body },
-        { catchError: false, responseAs: 'json' }
+      )
+    } catch (e) {
+      testServerError(e)
+    }
+  })
+
+  test('HEAD unsafe check error', async () => {
+    try {
+      await httpClient.headUnsafe(
+        `/user-error`,
+      )
+    } catch (e) {
+      testServerError(e)
+    }
+  })
+
+  test('OPTIONS unsafe check error', async () => {
+    try {
+      await httpClient.headUnsafe(
+        `/user-error`,
       )
     } catch (e) {
       testServerError(e)
