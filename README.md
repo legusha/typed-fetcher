@@ -57,7 +57,7 @@ const { data, error } = await httpClient.get<SomeInterface>('https://example.com
 
 ### HTML script
 ```html
-<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.13/dist/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed-fetcher@1.0.14/dist/index.umd.js"></script>
 <script>
     const { httpClient } = window.typedFetcher
     
@@ -122,7 +122,7 @@ const options = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${exampleToken}`,
   },
-}
+} as const
 
 // And then this options will be applied for every request
 httpClient.applyOptions(options)
@@ -137,7 +137,8 @@ Rewrite **[options](https://developer.mozilla.org/en-US/docs/Web/API/RequestInit
 ```typescript
 const optionsForConcreteRequest = {
   credentials: 'omit',
-}
+} as const
+
 const { data, error } = await httpClient
   .get<SomeInterface>('https://some-api.com/some-endpoint', optionsForConcreteRequest);
 ```
@@ -166,6 +167,45 @@ const settingsForConcreteRequest = {
 }
 const { data, error } = await httpClient
   .get<SomeInterface>('/some-endpoint', {}, settingsForConcreteRequest);
+```
+
+### Unsafe requests
+
+If you prefer to work with `try/catch` blocks or expect successful responses and want to access data directly, you can use the `*Unsafe` methods. These methods return the data directly (type `Data`) instead of the `{ data, error }` object.
+
+**Note:** If the request fails (non-2xx status or network error), these methods will **throw** an error. You **must** wrap these calls in a `try/catch` block to handle failures.
+
+Supported methods: `getUnsafe`, `postUnsafe`, `putUnsafe`, `patchUnsafe`, `deleteUnsafe`, `headUnsafe`, `optionsUnsafe`.
+
+```typescript
+try {
+  // GET: Returns Data directly
+  const user = await httpClient.getUnsafe<User>('/user/1');
+  console.log(user.name);
+
+  // POST: Sends data and returns response Data
+  const newUser = await httpClient.postUnsafe<User>('/user', { body: { name: 'Alice' } });
+
+  // PUT: Updates data and returns response Data
+  const updatedUser = await httpClient.putUnsafe<User>('/user/1', { body: { name: 'Alice Smith' } });
+
+  // PATCH: Partially updates data and returns response Data
+  const patchedUser = await httpClient.patchUnsafe<User>('/user/1', { body: { name: 'Alice Jones' } });
+
+  // DELETE: Deletes data and returns response Data
+  const deletedUser = await httpClient.deleteUnsafe<User>('/user/1');
+
+  // HEAD: Returns Headers
+  const headHeaders = await httpClient.headUnsafe('/user/1');
+
+  // OPTIONS: Returns Headers
+  const optionsHeaders = await httpClient.optionsUnsafe('/user/1');
+
+} catch (error) {
+  // error is HttpError (or Error)
+  // This block catches errors from ANY of the above requests
+  console.error('Request failed:', error);
+}
 ```
 
 ### Timeout and Circuit Breaker
@@ -327,7 +367,8 @@ void (async (): Promise<void> => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${exampleToken}`,
     },
-  }
+  } as const
+  
   const {data, error} = await httpClient.get<User>(`/posts/${userId}`, requestOptions)
 
   if (error) {

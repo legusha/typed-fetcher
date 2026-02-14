@@ -1,5 +1,5 @@
 import type { HttpError } from '../error/errorBase';
-import type { Settings } from '../htttpClientSetting';
+import type { BaseSettings, Settings } from '../htttpClientSetting';
 
 export const REQUEST_METHOD = {
   GET: 'GET',
@@ -24,7 +24,7 @@ interface HttpResponseError {
   error: HttpError;
 }
 
-interface HttpResponseSuccess<Data> {
+export interface HttpResponseSuccess<Data> {
   data: Data;
   error: null;
 }
@@ -42,44 +42,58 @@ export interface HttpResponseSuccessFull<Data> extends HttpResponseSuccess<Data>
 export type HttpResponseFull<Data> = HttpResponseSuccessFull<Data> | HttpResponseErrorFull;
 
 export interface HttpClientBase {
-  get: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
+  get<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponse<Data>>;
 
-  post: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
+  post<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponse<Data>>;
 
-  put: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
+  put<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponse<Data>>;
 
-  patch: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
+  patch<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponse<Data>>;
 
-  delete: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Data>>;
+  delete<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponse<Data>>;
 
-  head: (url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Headers>>;
+  head(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponse<Headers>>;
 
-  options: (url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponse<Headers>>;
+  options(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponse<Headers>>;
 
-  fetchGet: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
+  getUnsafe<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<Data>;
 
-  fetchPost: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
+  postUnsafe<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<Data>;
 
-  fetchPut: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
+  putUnsafe<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<Data>;
 
-  fetchPatch: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
+  patchUnsafe<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<Data>;
 
-  fetchDelete: <Data>(url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<Data>>;
+  deleteUnsafe<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<Data>;
 
-  fetchHead: (url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<null>>;
+  headUnsafe(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<Headers>;
 
-  fetchOptions: (url: Url, options?: RequestOptionsInput, setting?: Settings) => Promise<HttpResponseFull<null>>;
+  optionsUnsafe(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<Headers>;
 
-  applyOptions: (options: StableOptions) => void;
-  unapplyOptions: () => void;
+  fetchGet<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponseFull<Data>>;
 
-  applySettings: (settings: Settings) => void;
-  unapplySettings: () => void;
+  fetchPost<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponseFull<Data>>;
+
+  fetchPut<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponseFull<Data>>;
+
+  fetchPatch<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponseFull<Data>>;
+
+  fetchDelete<Data>(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponseFull<Data>>;
+
+  fetchHead(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponseFull<null>>;
+
+  fetchOptions(url: Url, options?: RequestOptionsInput, setting?: BaseSettings): Promise<HttpResponseFull<null>>;
+
+  applyOptions(options: StableOptions): void;
+  unapplyOptions(): void;
+
+  applySettings(settings: BaseSettings): void;
+  unapplySettings(): void;
 }
 
 export interface HttpErrorManagerBase {
   throw: (response: Response, dataText: string) => never;
-  parse: <Data>(errorData: unknown) => HttpResponseFull<Data>;
+  parse: <Data>(errorData: unknown, settings: Settings) => HttpResponseFull<Data>;
 }
 
 export interface HttpFetchProvider {

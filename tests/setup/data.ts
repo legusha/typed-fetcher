@@ -14,5 +14,11 @@ export const data = {
   },
   HEADERS: {
     'X-Custom-Header': 'test-value',
+  },
+  HTTP_ERRORS: {
+    SERVER_ERROR: {
+      message: 'Server error occurred',
+      statusCode: 500,
+    },
   }
 }

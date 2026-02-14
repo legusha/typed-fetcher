@@ -1,5 +1,5 @@
 import type { RequestOptionsInput, HttpResponseFull, RequestOptions, StableOptions } from './httpClient.types';
-import type { Settings } from '../htttpClientSetting';
+import type { BaseSettings } from '../htttpClientSetting';
 import { RESPONSE_AS } from '../htttpClientSetting';
 
 export class HttpClientNormalizer {
@@ -9,7 +9,7 @@ export class HttpClientNormalizer {
     this.options = options;
   }
 
-  public normalizeOptions(options: RequestOptionsInput, setting: Settings): RequestOptions {
+  public normalizeOptions(options: RequestOptionsInput, setting: BaseSettings): RequestOptions {
     const requestOptions: RequestOptions = {
       ...this.options,
       ...options,
@@ -26,7 +26,7 @@ export class HttpClientNormalizer {
     };
   }
 
-  public async normalizeResponse<Data>(response: Response, setting: Settings): Promise<HttpResponseFull<Data>> {
+  public async normalizeResponse<Data>(response: Response, setting: BaseSettings): Promise<HttpResponseFull<Data>> {
     return {
       original: response,
       data: await response[setting.responseAs](),
